@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>3D Модель: Катапульта «Резиновая» — STEM Олимпиада Астана</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    :root {
+      --background: #0b1120;
+      --foreground: #f8fafc;
+      --card: #111827;
+      --border: #1e293b;
+      --muted-foreground: #94a3b8;
+      --primary: #0ea5e9;
+      --primary-foreground: #ffffff;
+      --secondary: #1e293b;
+      --secondary-foreground: #e2e8f0;
+    }
+    html.light {
+      --background: #f1f5f9;
+      --foreground: #0f172a;
+      --card: #ffffff;
+      --border: #cbd5e1;
+      --muted-foreground: #475569;
+      --primary: #0284c7;
+      --primary-foreground: #ffffff;
+      --secondary: #e2e8f0;
+      --secondary-foreground: #0f172a;
+    }
+    * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      background-color: var(--background);
+      color: var(--foreground);
+      margin: 0;
+      overflow-x: hidden;
+    }
+    canvas { touch-action: none; }
+    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* Mobile Mode Container Simulation when toggled on PC */
+    body.mode-mobile #appContainer {
+      max-width: 430px !important;
+      margin: 0 auto;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      min-height: 100vh;
+      padding: 8px !important;
+      background: var(--background);
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.55);
+    }
+    body.mode-mobile .pc-grid-12 {
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    body.mode-mobile #viewportWrapper {
+      height: 390px !important;
+    }
+    body.mode-mobile .hide-on-mobile-mode {
+      display: none !important;
+    }
+  </style>
+</head>
+<body class="antialiased">
+  <!-- FLOATING CORNER DEVICE / PERSPECTIVE SWITCHER (ТЕЛЕФОН / ПК) -->
+  <div class="fixed top-3 right-3 z-50 flex items-center gap-1 bg-[var(--card)]/95 backdrop-blur-md border-2 border-[var(--primary)] rounded-full p-1 shadow-xl">
+    <button id="btnModePC" onclick="setDeviceMode('pc')" class="px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition bg-[var(--primary)] text-[var(--primary-foreground)]">
+      <span>💻 ПК</span>
+    </button>
+    <button id="btnModeMobile" onclick="setDeviceMode('mobile')" class="px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+      <span>📱 Телефон</span>
+    </button>
+  </div>
+
+  <div id="appContainer" class="max-w-7xl mx-auto p-3 md:p-5 space-y-3.5 transition-all duration-200">
+    <!-- Header -->
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5 md:p-4 shadow-lg flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 pr-36 sm:pr-44 lg:pr-48">
+      <div>
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">
+            STEM Олимпиада • Приложение №1
+          </span>
+          <a href="catapult_rezinovaya.stl" download class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition">
+            ⬇ .STL
+          </a>
+          <a href="catapult_rezinovaya.obj" download class="px-2 py-0.5 rounded-full text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-500 transition">
+            ⬇ .OBJ
+          </a>
+          <button onclick="toggleTheme()" class="px-2 py-0.5 rounded-full text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+            ☀/🌙
+          </button>
+        </div>
+        <h1 class="text-base md:text-xl font-bold mt-1 text-[var(--foreground)] leading-snug">
+          Катапульта «Резиновая» — 3D Модель и Лаборатория
+        </h1>
+        <p id="controlHintText" class="text-xs text-[var(--muted-foreground)] mt-0.5">
+          Управление: <b>1 палец / ЛКМ</b> — поворот 360°, <b>2 пальца (щипок) / Колесо</b> — зум, <b>ПКМ</b> — сдвиг.
+        </p>
+      </div>
+
+      <!-- Category & Layout Switchers -->
+      <div class="flex flex-wrap items-center gap-1.5">
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-lg p-0.5 flex text-xs">
+          <button id="btnCat1" onclick="setCategory(1)" class="px-2 py-1 rounded-md font-medium transition">
+            Кат. I (8–9 кл.)
+          </button>
+          <button id="btnCat2" onclick="setCategory(2)" class="px-2 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition">
+            Кат. II (10–11 кл.)
+          </button>
+        </div>
+
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-lg p-0.5 flex text-xs">
+          <button id="btnLayoutA" onclick="setMountType('direct')" class="px-2 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition">
+            Схема А
+          </button>
+          <button id="btnLayoutB" onclick="setMountType('seesaw')" class="px-2 py-1 rounded-md font-medium transition">
+            Схема Б
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Grid: 3D Viewport + Controls -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5 pc-grid-12">
+      <!-- 3D Viewport Column (8 cols) -->
+      <div class="lg:col-span-8 bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden shadow-lg flex flex-col">
+        <!-- Camera & Display Toolbar -->
+        <div class="p-2 border-b border-[var(--border)] flex flex-wrap items-center justify-between gap-1.5 bg-[var(--background)]/50">
+          <div class="flex flex-wrap items-center gap-1">
+            <button onclick="setCameraPreset('iso')" class="px-2 py-1 text-xs rounded-md bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] transition font-medium">
+              3D Вид
+            </button>
+            <button onclick="setCameraPreset('side')" class="px-2 py-1 text-xs rounded-md bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] transition font-medium">
+              Сбоку (45°)
+            </button>
+            <button onclick="setCameraPreset('front')" class="px-2 py-1 text-xs rounded-md bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] transition font-medium">
+              Спереди
+            </button>
+            <button onclick="setCameraPreset('top')" class="px-2 py-1 text-xs rounded-md bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] transition font-medium">
+              Сверху
+            </button>
+            <button onclick="setCameraPreset('range')" class="px-2 py-1 text-xs rounded-md bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] transition font-medium">
+              Трасса 3 м
+            </button>
+          </div>
+
+          <div class="flex items-center gap-2.5 text-xs">
+            <label class="flex items-center gap-1 cursor-pointer">
+              <input type="checkbox" id="chkLabels" checked onchange="state.showLabels = this.checked" class="rounded" />
+              <span>Метки</span>
+            </label>
+            <label class="flex items-center gap-1 cursor-pointer">
+              <input type="checkbox" id="chkDims" checked onchange="state.showDims = this.checked" class="rounded" />
+              <span>45° и h</span>
+            </label>
+            <label class="flex items-center gap-1 cursor-pointer">
+              <input type="checkbox" id="chkSlowMo" onchange="state.slowMo = this.checked" class="rounded" />
+              <span>Slow-Mo</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 3D Canvas Container -->
+        <div id="viewportWrapper" class="relative w-full" style="height: 490px;">
+          <canvas id="canvas3d" class="w-full h-full block cursor-grab active:cursor-grabbing"></canvas>
+
+          <!-- In-Canvas Corner Perspective Pill (Quick Switch inside 3D Viewport too!) -->
+          <div class="absolute top-2.5 right-2.5 flex flex-col gap-1.5 z-10">
+            <button id="viewportModeBadge" onclick="toggleDeviceMode()" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-[var(--card)]/90 backdrop-blur border border-[var(--primary)] text-[var(--foreground)] shadow-md hover:bg-[var(--secondary)] transition flex items-center gap-1.5" title="Переключить перспективу Телефон / ПК">
+              <span id="viewportModeIcon">💻</span>
+              <span id="viewportModeText">Перспектива: ПК</span>
+            </button>
+
+            <!-- Touch Zoom & Reset Buttons for Mobile convenience -->
+            <div class="flex items-center justify-end gap-1">
+              <button onclick="zoomStep(1.18)" class="w-8 h-8 rounded-lg bg-[var(--card)]/90 backdrop-blur border border-[var(--border)] text-sm font-bold shadow hover:bg-[var(--secondary)] flex items-center justify-center" title="Приблизить">+</button>
+              <button onclick="zoomStep(0.84)" class="w-8 h-8 rounded-lg bg-[var(--card)]/90 backdrop-blur border border-[var(--border)] text-sm font-bold shadow hover:bg-[var(--secondary)] flex items-center justify-center" title="Отдалить">−</button>
+              <button onclick="setCameraPreset('iso')" class="px-2 h-8 rounded-lg bg-[var(--card)]/90 backdrop-blur border border-[var(--border)] text-xs font-semibold shadow hover:bg-[var(--secondary)] flex items-center justify-center" title="Сбросить камеру">🎯</button>
+            </div>
+          </div>
+
+          <!-- Live Telemetry Overlay -->
+          <div id="hudOverlay" class="absolute top-2.5 left-2.5 bg-[var(--card)]/90 backdrop-blur border border-[var(--border)] rounded-lg p-2.5 text-xs space-y-1 pointer-events-none shadow-md max-w-[215px] sm:max-w-xs">
+            <div class="font-semibold text-[var(--foreground)] flex items-center gap-1.5">
+              <span id="statusDot" class="w-2 h-2 rounded-full bg-emerald-500 inline-block shrink-0"></span>
+              <span id="statusText" class="truncate">В покое у ограничителя (45°)</span>
+            </div>
+            <div class="text-[var(--muted-foreground)] grid grid-cols-2 gap-x-2 gap-y-0.5 pt-1 border-t border-[var(--border)]">
+              <span>Угол плеча:</span> <strong id="hudAngle" class="text-[var(--foreground)]">45.0°</strong>
+              <span>Высота h:</span> <strong id="hudHeight" class="text-[var(--foreground)]">24.8 см</strong>
+              <span>Энергия E:</span> <strong id="hudEnergy" class="text-[var(--foreground)]">0.294 Дж</strong>
+              <span>Скорость v:</span> <strong id="hudVel" class="text-[var(--foreground)]">5.42 м/с</strong>
+              <span>L теор.:</span> <strong id="hudLTeor" class="text-[var(--foreground)]">323.0 см</strong>
+              <span>Бросок:</span> <strong id="hudLastRange" class="text-emerald-400 font-bold">—</strong>
+            </div>
+          </div>
+
+          <!-- Bottom Instruction Pill -->
+          <div class="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between gap-2 pointer-events-none hide-on-mobile-mode">
+            <div class="bg-[var(--card)]/90 backdrop-blur border border-[var(--border)] rounded-lg px-3 py-1.5 text-xs text-[var(--muted-foreground)]">
+              <strong class="text-[var(--foreground)]">П. 1.3:</strong> Нажмите <b>«1. Взвести»</b> (фиксация чекой), затем <b>«2. ПУСК!»</b> — рычаг ударит в ограничитель 45°.
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Bar under Canvas (Touch-friendly big buttons on mobile) -->
+        <div class="p-2.5 md:p-3 border-t border-[var(--border)] bg-[var(--background)]/60 flex flex-wrap items-center justify-between gap-2">
+          <div class="grid grid-cols-3 sm:flex items-center gap-1.5 w-full sm:w-auto">
+            <button onclick="cockCatapult()" class="col-span-1 px-3 py-2.5 sm:py-2 rounded-lg text-xs font-semibold bg-amber-500 hover:bg-amber-600 active:scale-95 text-white shadow-sm transition text-center">
+              1. Взвести
+            </button>
+            <button onclick="fireCatapult()" class="col-span-1 px-3 py-2.5 sm:py-2 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white shadow-sm transition text-center">
+              2. ПУСК! (45°)
+            </button>
+            <button onclick="resetCatapult()" class="col-span-1 px-2.5 py-2.5 sm:py-2 rounded-lg text-xs font-medium bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] transition text-center">
+              Сброс
+            </button>
+          </div>
+
+          <div class="flex items-center gap-1.5 w-full sm:w-auto justify-between sm:justify-end">
+            <button onclick="runFullExperiment()" class="flex-1 sm:flex-initial px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 transition shadow-sm text-center">
+              ⚡ Авто-серия 4 грузов
+            </button>
+            <button onclick="clearTrajectories()" class="px-2.5 py-2 rounded-lg text-xs font-medium bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] transition">
+              Очистить
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Sidebar: Projectile & Construction Parameters (4 cols) -->
+      <div class="lg:col-span-4 space-y-3.5">
+        <!-- Projectile Selector (Этап 3.1) -->
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5 md:p-4 shadow-lg space-y-2.5">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-bold text-[var(--foreground)]">Этап 3.1. Форма груза (20 г)</h2>
+            <span class="text-xs text-[var(--muted-foreground)]">Пластилин 1.75 г/см³</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="selectShape('sphere')" id="shape-sphere" class="p-2.5 rounded-lg border text-left transition border-[var(--primary)] bg-[var(--secondary)]">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-xs">● Шар</span>
+                <span class="text-xs px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-semibold">Макс. L</span>
+              </div>
+              <div class="text-xs text-[var(--muted-foreground)] mt-1">Ø ≈ 2.7 см</div>
+            </button>
+
+            <button onclick="selectShape('cube')" id="shape-cube" class="p-2.5 rounded-lg border border-[var(--border)] text-left transition hover:bg-[var(--secondary)]/50">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-xs">■ Куб</span>
+                <span class="text-xs text-[var(--muted-foreground)]">20.0 г</span>
+              </div>
+              <div class="text-xs text-[var(--muted-foreground)] mt-1">Ребро ≈ 2.2 см</div>
+            </button>
+
+            <button onclick="selectShape('cone')" id="shape-cone" class="p-2.5 rounded-lg border border-[var(--border)] text-left transition hover:bg-[var(--secondary)]/50">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-xs">▲ Конус</span>
+                <span class="text-xs text-[var(--muted-foreground)]">20.0 г</span>
+              </div>
+              <div class="text-xs text-[var(--muted-foreground)] mt-1">h ≈ 4.5, Ø ≈ 3 см</div>
+            </button>
+
+            <button onclick="selectShape('disk')" id="shape-disk" class="p-2.5 rounded-lg border border-[var(--border)] text-left transition hover:bg-[var(--secondary)]/50">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-xs">▬ Диск</span>
+                <span class="text-xs px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 font-semibold">Мин. L</span>
+              </div>
+              <div class="text-xs text-[var(--muted-foreground)] mt-1">Ø ≈ 4.8 × 0.5 см</div>
+            </button>
+          </div>
+
+          <div id="shapeNote" class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs text-[var(--muted-foreground)] leading-relaxed">
+            <strong class="text-[var(--foreground)]">Шар (Ø 2.7 см, S = 5.73 см²):</strong> Минимальная площадь поперечного сечения, отсутствие кувыркания в полёте, наименьшее сопротивление воздуха (Cd ≈ 0.47).
+          </div>
+        </div>
+
+        <!-- Standardized Parameters (Этап 1.1) -->
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5 md:p-4 shadow-lg space-y-2.5">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-bold text-[var(--foreground)]">Этап 1. Параметры конструкции</h2>
+            <button onclick="resetParams()" class="text-xs underline text-[var(--muted-foreground)] hover:text-[var(--foreground)]">Стандарт</button>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div>
+              <div class="flex justify-between mb-0.5">
+                <span>Длина плеча рычага (30–40 см):</span>
+                <strong id="valArmLen">35 см</strong>
+              </div>
+              <input type="range" id="rngArmLen" min="30" max="40" step="1" value="35" oninput="updateParams()" class="w-full accent-[var(--primary)]" />
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-0.5">
+                <span>Высота оси опоры (12–15 см):</span>
+                <strong id="valPostH">14 см</strong>
+              </div>
+              <input type="range" id="rngPostH" min="12" max="15" step="0.5" value="14" oninput="updateParams()" class="w-full accent-[var(--primary)]" />
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-0.5">
+                <span>Крепление резинки от края (5–7 см):</span>
+                <strong id="valBandDist">6 см</strong>
+              </div>
+              <input type="range" id="rngBandDist" min="5" max="7" step="0.5" value="6" oninput="updateParams()" class="w-full accent-[var(--primary)]" />
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-0.5">
+                <span>Растяжение резинок x (см):</span>
+                <strong id="valStretch">14.0 см</strong>
+              </div>
+              <input type="range" id="rngStretch" min="8" max="18" step="0.5" value="14" oninput="updateParams()" class="w-full accent-[var(--primary)]" />
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-0.5">
+                <span>Жёсткость 2 жгутов k (п. 5.1):</span>
+                <strong id="valStiff">30 Н/м</strong>
+              </div>
+              <input type="range" id="rngStiff" min="18" max="45" step="1" value="30" oninput="updateParams()" class="w-full accent-[var(--primary)]" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Section: Specification Checklist + Experiment Tables & Calculations -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5 pc-grid-12">
+      <!-- Specification Table (Этап 1.1) -->
+      <div class="lg:col-span-5 bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5 md:p-4 shadow-lg space-y-2">
+        <h3 class="text-sm font-bold text-[var(--foreground)]">Спецификация узлов 3D-модели (табл. 1.1)</h3>
+        <div class="space-y-1.5 text-xs">
+          <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] flex justify-between gap-2">
+            <span><b>1. Основание:</b> рама «Н»-типа, брус 15×15 мм</span>
+            <span class="text-emerald-400 font-semibold shrink-0">✓ 36×15 см</span>
+          </div>
+          <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] flex justify-between gap-2">
+            <span><b>2. Опора:</b> вертикальные стойки</span>
+            <span id="specPost" class="text-emerald-400 font-semibold shrink-0">✓ Выс. 14 см</span>
+          </div>
+          <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] flex justify-between gap-2">
+            <span><b>3. Плечо (рычаг):</b> брус 15×15 мм</span>
+            <span id="specArm" class="text-emerald-400 font-semibold shrink-0">✓ Длина 35 см</span>
+          </div>
+          <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] flex justify-between gap-2">
+            <span><b>4. Ось вращения:</b> стальной стержень Ø 5 мм</span>
+            <span class="text-emerald-400 font-semibold shrink-0">✓ Перпендик.</span>
+          </div>
+          <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] flex justify-between gap-2">
+            <span><b>5. Привод:</b> 2 резиновых жгута Ø 4 мм</span>
+            <span id="specBand" class="text-emerald-400 font-semibold shrink-0">✓ Отступ 6 см</span>
+          </div>
+          <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] flex justify-between gap-2">
+            <span><b>6. Ограничитель:</b> фиксирует вылет под 45°</span>
+            <span class="text-emerald-400 font-semibold shrink-0">✓ Угол 45.0°</span>
+          </div>
+          <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] flex justify-between gap-2">
+            <span><b>7. Корзина и 8. Спусковой фиксатор (чека)</b></span>
+            <span class="text-emerald-400 font-semibold shrink-0">✓ Установлены</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Table & Physics Calculator (Этапы 2-3, п. 5-6) -->
+      <div class="lg:col-span-7 bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5 md:p-4 shadow-lg space-y-3">
+        <div>
+          <h3 class="text-sm font-bold text-[var(--foreground)]" id="tableTitle">
+            Таблица результатов эксперимента и расчётов
+          </h3>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            E = ½kx², v = √(2E/m), L = (v·cos45°/g)·[v·sin45° + √((v·sin45°)² + 2gh)]
+          </p>
+        </div>
+
+        <div class="overflow-x-auto custom-scroll">
+          <table class="w-full text-xs border-collapse">
+            <thead>
+              <tr id="tableHeaderRow" class="border-b border-[var(--border)] text-[var(--muted-foreground)] text-left"></tr>
+            </thead>
+            <tbody id="tableBody" class="divide-y divide-[var(--border)]"></tbody>
+          </table>
+        </div>
+
+        <div id="physicsBreakdown" class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs text-[var(--muted-foreground)] grid grid-cols-1 md:grid-cols-3 gap-2"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      document.documentElement.classList.toggle('light');
+    }
+
+    const SHAPES = {
+      sphere: {
+        id: 'sphere', name: 'Шар', dims: 'Ø ≈ 2.7 см', massG: 20.0, cd: 0.47,
+        areaCm2: Math.PI * Math.pow(1.35, 2), charLenM: 0.027, tumbleFactor: 0.012, dragMultiplier: 1.0, color: '#10b981',
+        desc: '<strong class="text-[var(--foreground)]">Шар (Ø 2.7 см, S = 5.73 см²):</strong> Минимальная площадь поперечного сечения, отсутствие кувыркания в полёте, наименьшее сопротивление воздуха (Cd ≈ 0.47).'
+      },
+      cube: {
+        id: 'cube', name: 'Куб', dims: 'Ребро ≈ 2.2 см', massG: 20.0, cd: 1.05,
+        areaCm2: 2.2 * 2.2 * 1.18, charLenM: 0.022, tumbleFactor: 0.032, dragMultiplier: 2.15, color: '#3b82f6',
+        desc: '<strong class="text-[var(--foreground)]">Куб (ребро 2.2 см, S ≈ 4.84–6.84 см²):</strong> Острые грани вызывают ранний срыв потока и турбулентный след (Cd ≈ 1.05). При вращении эффективная площадь меняется.'
+      },
+      cone: {
+        id: 'cone', name: 'Конус', dims: 'h ≈ 4.5 см, Ø ≈ 3 см', massG: 20.0, cd: 0.82,
+        areaCm2: 7.07, charLenM: 0.030, tumbleFactor: 0.042, dragMultiplier: 1.85, color: '#f59e0b',
+        desc: '<strong class="text-[var(--foreground)]">Конус (h = 4.5 см, Ø = 3.0 см, Sосн = 7.07 см²):</strong> Без хвостового оперения центр давления не совпадает с центром масс — конус кувыркается в полёте.'
+      },
+      disk: {
+        id: 'disk', name: 'Диск', dims: 'Ø ≈ 4.8 см, h ≈ 0.5 см', massG: 20.0, cd: 1.17,
+        areaCm2: Math.PI * Math.pow(2.4, 2) * 0.78, charLenM: 0.048, tumbleFactor: 0.055, dragMultiplier: 3.60, color: '#ef4444',
+        desc: '<strong class="text-[var(--foreground)]">Плоский диск (Ø 4.8 см, h = 0.5 см, Sмакс = 18.1 см²):</strong> Максимальная площадь поверхности. В полёте разворачивается широкой стороной к потоку (Cd ≈ 1.17) и сильно тормозится.'
+      }
+    };
+
+    const state = {
+      deviceMode: 'pc', // 'pc' | 'mobile'
+      category: 2,
+      mountType: 'direct',
+      selectedShape: 'sphere',
+      armLengthCm: 35,
+      postHeightCm: 14,
+      bandOffsetCm: 6,
+      stretchCm: 14.0,
+      stiffnessK: 30,
+      showLabels: true,
+      showDims: true,
+      slowMo: false,
+      armAngleDeg: 45,
+      catapultPhase: 'rest',
+      pinPulled: false,
+      projectile: null,
+      trajectories: [],
+      results: {
+        sphere: [256.4, 259.1, 254.8, 258.0, 256.7],
+        cube:   [228.5, 222.0, 231.4, 225.2, 227.9],
+        cone:   [236.2, 229.0, 241.5, 232.8, 238.0],
+        disk:   [194.0, 185.5, 201.2, 189.8, 192.5]
+      },
+      camYaw: -0.62,
+      camPitch: 0.34,
+      camZoom: 9.2,
+      camPanX: -4,
+      camPanY: 11,
+      camPanZ: 0
+    };
+
+    // Switch between Phone (portrait perspective & compact layout) and PC (widescreen perspective)
+    function setDeviceMode(mode) {
+      state.deviceMode = mode;
+      const btnPC = document.getElementById('btnModePC');
+      const btnMob = document.getElementById('btnModeMobile');
+      const vpIcon = document.getElementById('viewportModeIcon');
+      const vpText = document.getElementById('viewportModeText');
+
+      if (mode === 'mobile') {
+        document.body.classList.add('mode-mobile');
+        btnMob.className = 'px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition bg-[var(--primary)] text-[var(--primary-foreground)] shadow';
+        btnPC.className = 'px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition text-[var(--muted-foreground)] hover:text-[var(--foreground)]';
+        vpIcon.textContent = '📱';
+        vpText.textContent = 'Перспектива: Телефон';
+        // Adjust 3D perspective for narrow portrait phone screen so nothing is clipped
+        state.camYaw = -0.56;
+        state.camPitch = 0.38;
+        state.camZoom = 6.2;
+        state.camPanX = -3;
+        state.camPanY = 12.5;
+      } else {
+        document.body.classList.remove('mode-mobile');
+        btnPC.className = 'px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition bg-[var(--primary)] text-[var(--primary-foreground)] shadow';
+        btnMob.className = 'px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition text-[var(--muted-foreground)] hover:text-[var(--foreground)]';
+        vpIcon.textContent = '💻';
+        vpText.textContent = 'Перспектива: ПК';
+        state.camYaw = -0.62;
+        state.camPitch = 0.34;
+        state.camZoom = 9.2;
+        state.camPanX = -4;
+        state.camPanY = 11;
+      }
+    }
+
+    function toggleDeviceMode() {
+      setDeviceMode(state.deviceMode === 'pc' ? 'mobile' : 'pc');
+    }
+
+    function zoomStep(factor) {
+      state.camZoom = Math.max(1.4, Math.min(22, state.camZoom * factor));
+    }
+
+    function computePhysics() {
+      const g = 9.8, m = 0.020, x = state.stretchCm / 100;
+      const E = 0.5 * state.stiffnessK * x * x;
+      const v = Math.sqrt((2 * E) / m);
+      const pivotYCm = 1.5 + state.postHeightCm;
+      const workingRadiusCm = state.mountType === 'direct' ? (state.armLengthCm - 5) : (state.armLengthCm * 0.52);
+      const hCm = pivotYCm + workingRadiusCm * Math.sin(Math.PI / 4) * 0.45;
+      const hM = hCm / 100;
+      const alpha = Math.PI / 4;
+      const vCos = v * Math.cos(alpha), vSin = v * Math.sin(alpha);
+      const L0M = (v * v * Math.sin(2 * alpha)) / g;
+      const LTeorM = (vCos / g) * (vSin + Math.sqrt(vSin * vSin + 2 * g * hM));
+      return { E, v, hCm, hM, L0Cm: L0M * 100, LTeorCm: LTeorM * 100, pivotYCm, workingRadiusCm };
+    }
+
+    function simulateFlightTrajectory(shapeKey, addRandomScatter = true) {
+      const phys = computePhysics();
+      const shape = SHAPES[shapeKey];
+      const g = 9.8, rhoAir = 1.225, massKg = shape.massG / 1000, alpha = Math.PI / 4;
+      const jitterVel = addRandomScatter ? (1 + (Math.random() - 0.5) * shape.tumbleFactor) : 1.0;
+      const jitterAngle = addRandomScatter ? ((Math.random() - 0.5) * shape.tumbleFactor * 0.6) : 0.0;
+      const v0 = phys.v * jitterVel;
+      const launchAngle = alpha + jitterAngle;
+      let vx = v0 * Math.cos(launchAngle), vy = v0 * Math.sin(launchAngle);
+      let xM = 0, yM = phys.hM;
+      const dt = 0.004;
+      const pointsCm = [{ x: 0, y: phys.hCm, z: 0 }];
+      const effDragFactor = 0.5 * rhoAir * (shape.areaCm2 * 1e-4) * shape.cd * shape.dragMultiplier * 7.2;
+
+      let t = 0;
+      while (yM > 0 && t < 5.0) {
+        const speed = Math.sqrt(vx * vx + vy * vy);
+        const ax = -(effDragFactor * speed * vx) / massKg;
+        const ay = -g - (effDragFactor * speed * vy) / massKg;
+        vx += ax * dt; vy += ay * dt;
+        xM += vx * dt; yM += vy * dt;
+        t += dt;
+        if (yM < 0) yM = 0;
+        pointsCm.push({ x: xM * 100, y: yM * 100, z: 0 });
+      }
+      return { shapeKey, color: shape.color, pointsCm, rangeCm: Number((xM * 100).toFixed(1)) };
+    }
+
+    function regenerateExperimentData() {
+      ['sphere', 'cube', 'cone', 'disk'].forEach(key => {
+        const trials = [];
+        for (let i = 0; i < 5; i++) trials.push(simulateFlightTrajectory(key, true).rangeCm);
+        state.results[key] = trials;
+      });
+      renderTable();
+      updateHUD();
+    }
+
+    function setCategory(cat) {
+      state.category = cat;
+      document.getElementById('btnCat1').className = cat === 1
+        ? 'px-2 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition'
+        : 'px-2 py-1 rounded-md font-medium transition';
+      document.getElementById('btnCat2').className = cat === 2
+        ? 'px-2 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition'
+        : 'px-2 py-1 rounded-md font-medium transition';
+      renderTable();
+    }
+
+    function setMountType(type) {
+      state.mountType = type;
+      document.getElementById('btnLayoutA').className = type === 'direct'
+        ? 'px-2 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition'
+        : 'px-2 py-1 rounded-md font-medium transition';
+      document.getElementById('btnLayoutB').className = type === 'seesaw'
+        ? 'px-2 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition'
+        : 'px-2 py-1 rounded-md font-medium transition';
+      updateHUD();
+      renderTable();
+    }
+
+    function selectShape(shapeKey) {
+      state.selectedShape = shapeKey;
+      ['sphere', 'cube', 'cone', 'disk'].forEach(k => {
+        document.getElementById('shape-' + k).className = k === shapeKey
+          ? 'p-2.5 rounded-lg border text-left transition border-[var(--primary)] bg-[var(--secondary)]'
+          : 'p-2.5 rounded-lg border border-[var(--border)] text-left transition hover:bg-[var(--secondary)]/50';
+      });
+      document.getElementById('shapeNote').innerHTML = SHAPES[shapeKey].desc;
+      renderTable();
+    }
+
+    function updateParams() {
+      state.armLengthCm = parseFloat(document.getElementById('rngArmLen').value);
+      state.postHeightCm = parseFloat(document.getElementById('rngPostH').value);
+      state.bandOffsetCm = parseFloat(document.getElementById('rngBandDist').value);
+      state.stretchCm = parseFloat(document.getElementById('rngStretch').value);
+      state.stiffnessK = parseFloat(document.getElementById('rngStiff').value);
+
+      document.getElementById('valArmLen').textContent = state.armLengthCm + ' см';
+      document.getElementById('valPostH').textContent = state.postHeightCm + ' см';
+      document.getElementById('valBandDist').textContent = state.bandOffsetCm + ' см';
+      document.getElementById('valStretch').textContent = state.stretchCm.toFixed(1) + ' см';
+      document.getElementById('valStiff').textContent = state.stiffnessK + ' Н/м';
+
+      document.getElementById('specPost').textContent = '✓ Выс. ' + state.postHeightCm + ' см';
+      document.getElementById('specArm').textContent = '✓ Длина ' + state.armLengthCm + ' см';
+      document.getElementById('specBand').textContent = '✓ Отступ ' + state.bandOffsetCm + ' см';
+
+      regenerateExperimentData();
+    }
+
+    function resetParams() {
+      document.getElementById('rngArmLen').value = 35;
+      document.getElementById('rngPostH').value = 14;
+      document.getElementById('rngBandDist').value = 6;
+      document.getElementById('rngStretch').value = 14;
+      document.getElementById('rngStiff').value = 30;
+      updateParams();
+    }
+
+    function setCameraPreset(preset) {
+      const mScale = state.deviceMode === 'mobile' ? 0.68 : 1.0;
+      if (preset === 'iso') {
+        state.camYaw = -0.62; state.camPitch = 0.34; state.camZoom = 9.2 * mScale;
+        state.camPanX = -4; state.camPanY = 11.5; state.camPanZ = 0;
+      } else if (preset === 'side') {
+        state.camYaw = 0.0; state.camPitch = 0.05; state.camZoom = 10.5 * mScale;
+        state.camPanX = -2; state.camPanY = 12; state.camPanZ = 0;
+      } else if (preset === 'front') {
+        state.camYaw = -Math.PI / 2; state.camPitch = 0.15; state.camZoom = 10.0 * mScale;
+        state.camPanX = 0; state.camPanY = 12; state.camPanZ = 0;
+      } else if (preset === 'top') {
+        state.camYaw = 0.0; state.camPitch = 1.48; state.camZoom = 8.5 * mScale;
+        state.camPanX = 0; state.camPanY = 0; state.camPanZ = 0;
+      } else if (preset === 'range') {
+        state.camYaw = -0.25; state.camPitch = 0.28; state.camZoom = 2.15 * mScale;
+        state.camPanX = 115; state.camPanY = 18; state.camPanZ = 0;
+      }
+    }
+
+    function cockCatapult() {
+      state.projectile = null;
+      state.catapultPhase = 'cocking';
+      state.pinPulled = false;
+      updateStatusUI('Взведение плеча к фиксатору...', 'bg-amber-500');
+    }
+
+    function fireCatapult() {
+      if (state.catapultPhase !== 'cocked') state.armAngleDeg = 8;
+      state.pinPulled = true;
+      state.catapultPhase = 'firing';
+      updateStatusUI('Фиксатор выдернут! Выстрел...', 'bg-emerald-500');
+    }
+
+    function resetCatapult() {
+      state.catapultPhase = 'rest';
+      state.armAngleDeg = 45;
+      state.pinPulled = false;
+      state.projectile = null;
+      updateStatusUI('В покое у ограничителя (45°)', 'bg-emerald-500');
+    }
+
+    function clearTrajectories() {
+      state.trajectories = [];
+      state.projectile = null;
+      document.getElementById('hudLastRange').textContent = '—';
+    }
+
+    function runFullExperiment() {
+      state.trajectories = [];
+      ['sphere', 'cube', 'cone', 'disk'].forEach(key => {
+        const trials = [];
+        let lastSim = null;
+        for (let i = 0; i < 5; i++) {
+          lastSim = simulateFlightTrajectory(key, true);
+          trials.push(lastSim.rangeCm);
+        }
+        state.results[key] = trials;
+        state.trajectories.push(lastSim);
+      });
+      renderTable();
+      const activeSim = state.trajectories.find(t => t.shapeKey === state.selectedShape) || state.trajectories[0];
+      if (activeSim) {
+        document.getElementById('hudLastRange').textContent = activeSim.rangeCm.toFixed(1) + ' см';
+      }
+      updateStatusUI('Серия 4 грузов выполнена!', 'bg-emerald-500');
+    }
+
+    function updateStatusUI(text, dotColorClass) {
+      document.getElementById('statusText').textContent = text;
+      document.getElementById('statusDot').className = 'w-2 h-2 rounded-full inline-block shrink-0 ' + dotColorClass;
+    }
+
+    function updateHUD() {
+      const phys = computePhysics();
+      document.getElementById('hudAngle').textContent = state.armAngleDeg.toFixed(1) + '°';
+      document.getElementById('hudHeight').textContent = phys.hCm.toFixed(1) + ' см';
+      document.getElementById('hudEnergy').textContent = phys.E.toFixed(3) + ' Дж';
+      document.getElementById('hudVel').textContent = phys.v.toFixed(2) + ' м/с';
+      document.getElementById('hudLTeor').textContent = phys.LTeorCm.toFixed(1) + ' см';
+    }
+
+    function renderTable() {
+      const phys = computePhysics();
+      const thead = document.getElementById('tableHeaderRow');
+      const tbody = document.getElementById('tableBody');
+      const title = document.getElementById('tableTitle');
+
+      if (state.category === 1) {
+        title.textContent = 'Пункт 6. Результаты (Категория I: 8–9 кл., 3 запуска)';
+        thead.innerHTML = `
+          <th class="py-2 pr-2">Форма</th>
+          <th class="py-2 px-1.5">Масса</th>
+          <th class="py-2 px-1.5">Д.1</th>
+          <th class="py-2 px-1.5">Д.2</th>
+          <th class="py-2 px-1.5">Д.3</th>
+          <th class="py-2 pl-1.5 font-bold text-[var(--foreground)]">Lср (см)</th>
+        `;
+      } else {
+        title.textContent = 'Пункты 5 и 5.4. Результаты (Категория II: 10–11 кл., 5 запусков)';
+        thead.innerHTML = `
+          <th class="py-2 pr-2">Форма</th>
+          <th class="py-2 px-1">Д.1</th>
+          <th class="py-2 px-1">Д.2</th>
+          <th class="py-2 px-1">Д.3</th>
+          <th class="py-2 px-1">Д.4</th>
+          <th class="py-2 px-1">Д.5</th>
+          <th class="py-2 px-1.5 font-bold text-[var(--foreground)]">Lср ± σ</th>
+          <th class="py-2 px-1">Lтеор</th>
+          <th class="py-2 pl-1 font-bold text-[var(--foreground)]">Δ (%)</th>
+        `;
+      }
+
+      tbody.innerHTML = '';
+      ['sphere', 'cube', 'cone', 'disk'].forEach(key => {
+        const shape = SHAPES[key];
+        const allTrials = state.results[key];
+        const n = state.category === 1 ? 3 : 5;
+        const trials = allTrials.slice(0, n);
+        const mean = trials.reduce((a, b) => a + b, 0) / n;
+        const variance = trials.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / (n - 1);
+        const sigma = Math.sqrt(variance);
+        const deltaPct = ((phys.LTeorCm - mean) / phys.LTeorCm) * 100;
+
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-[var(--secondary)]/40 transition cursor-pointer';
+        tr.onclick = () => selectShape(key);
+
+        if (state.category === 1) {
+          tr.innerHTML = `
+            <td class="py-2 pr-2 font-semibold flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full inline-block" style="background:${shape.color}"></span>
+              ${shape.name}
+            </td>
+            <td class="py-2 px-1.5">20 г</td>
+            <td class="py-2 px-1.5">${trials[0].toFixed(1)}</td>
+            <td class="py-2 px-1.5">${trials[1].toFixed(1)}</td>
+            <td class="py-2 px-1.5">${trials[2].toFixed(1)}</td>
+            <td class="py-2 pl-1.5 font-bold text-[var(--foreground)]">${mean.toFixed(1)}</td>
+          `;
+        } else {
+          tr.innerHTML = `
+            <td class="py-2 pr-2 font-semibold flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full inline-block" style="background:${shape.color}"></span>
+              ${shape.name}
+            </td>
+            <td class="py-2 px-1">${trials[0].toFixed(1)}</td>
+            <td class="py-2 px-1">${trials[1].toFixed(1)}</td>
+            <td class="py-2 px-1">${trials[2].toFixed(1)}</td>
+            <td class="py-2 px-1">${trials[3].toFixed(1)}</td>
+            <td class="py-2 px-1">${trials[4].toFixed(1)}</td>
+            <td class="py-2 px-1.5 font-bold text-[var(--foreground)] whitespace-nowrap">${mean.toFixed(1)} ± ${sigma.toFixed(1)}</td>
+            <td class="py-2 px-1">${phys.LTeorCm.toFixed(1)}</td>
+            <td class="py-2 pl-1 font-bold ${key === 'sphere' ? 'text-emerald-400' : key === 'disk' ? 'text-rose-400' : 'text-amber-400'}">
+              ${deltaPct.toFixed(1)}%
+            </td>
+          `;
+        }
+        tbody.appendChild(tr);
+      });
+
+      const rho = 1.225, mu = 1.81e-5, curShape = SHAPES[state.selectedShape];
+      const Re = (rho * phys.v * curShape.charLenM) / mu;
+
+      document.getElementById('physicsBreakdown').innerHTML = `
+        <div>
+          <span class="block font-semibold text-[var(--foreground)]">П. 5.1–5.2. Энергия и скорость:</span>
+          <span>E = ½·${state.stiffnessK}·(${(state.stretchCm/100).toFixed(2)})² = <b>${phys.E.toFixed(3)} Дж</b></span><br/>
+          <span>v = √(2E/m) = <b>${phys.v.toFixed(2)} м/с</b> (m = 0.020 кг)</span>
+        </div>
+        <div>
+          <span class="block font-semibold text-[var(--foreground)]">П. 5.3. Дальность с поправкой на h:</span>
+          <span>L₀ (без h) = <b>${phys.L0Cm.toFixed(1)} см</b></span><br/>
+          <span>Lтеор (с h = ${phys.hCm.toFixed(1)} см) = <b>${phys.LTeorCm.toFixed(1)} см</b></span>
+        </div>
+        <div>
+          <span class="block font-semibold text-[var(--foreground)]">П. 6. Обтекание (${curShape.name}):</span>
+          <span>Число Рейнольдса Re ≈ <b>${Math.round(Re).toLocaleString('ru-RU')}</b></span><br/>
+          <span>S сечения ≈ ${curShape.areaCm2.toFixed(1)} см²</span>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 3D SOFTWARE ENGINE + MULTI-TOUCH (PINCH ZOOM & 1-FINGER ORBIT)
+    // =========================================================================
+    const canvas = document.getElementById('canvas3d');
+    const ctx = canvas.getContext('2d');
+    let isDragging = false, dragMode = 'orbit', lastMouseX = 0, lastMouseY = 0;
+    let activeTouches = new Map();
+    let lastPinchDist = null;
+
+    canvas.addEventListener('pointerdown', (e) => {
+      activeTouches.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      canvas.setPointerCapture(e.pointerId);
+      if (activeTouches.size === 1) {
+        isDragging = true;
+        dragMode = (e.button === 2 || e.shiftKey) ? 'pan' : 'orbit';
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+      } else if (activeTouches.size === 2) {
+        const pts = Array.from(activeTouches.values());
+        lastPinchDist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+      }
+    });
+
+    canvas.addEventListener('pointermove', (e) => {
+      if (activeTouches.has(e.pointerId)) {
+        activeTouches.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      }
+      if (activeTouches.size === 2) {
+        const pts = Array.from(activeTouches.values());
+        const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+        if (lastPinchDist && lastPinchDist > 5) {
+          const ratio = dist / lastPinchDist;
+          state.camZoom = Math.max(1.4, Math.min(22, state.camZoom * ratio));
+        }
+        lastPinchDist = dist;
+        return;
+      }
+      if (!isDragging) return;
+      const dx = e.clientX - lastMouseX, dy = e.clientY - lastMouseY;
+      lastMouseX = e.clientX; lastMouseY = e.clientY;
+      if (dragMode === 'orbit') {
+        state.camYaw += dx * 0.0085;
+        state.camPitch = Math.max(-0.15, Math.min(1.52, state.camPitch + dy * 0.0085));
+      } else {
+        const panScale = 1.2 / state.camZoom;
+        state.camPanX -= dx * panScale * Math.cos(state.camYaw);
+        state.camPanY += dy * panScale;
+      }
+    });
+
+    function endPointer(e) {
+      activeTouches.delete(e.pointerId);
+      if (activeTouches.size < 2) lastPinchDist = null;
+      if (activeTouches.size === 0) isDragging = false;
+    }
+    canvas.addEventListener('pointerup', endPointer);
+    canvas.addEventListener('pointercancel', endPointer);
+    canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      state.camZoom = Math.max(1.4, Math.min(22, state.camZoom * (e.deltaY < 0 ? 1.1 : 0.91)));
+    }, { passive: false });
+
+    function projectPoint(x, y, z, width, height) {
+      const tx = x - state.camPanX, ty = y - state.camPanY, tz = z - state.camPanZ;
+      const cosY = Math.cos(state.camYaw), sinY = Math.sin(state.camYaw);
+      const rx = tx * cosY - tz * sinY, rz1 = tx * sinY + tz * cosY;
+      const cosP = Math.cos(state.camPitch), sinP = Math.sin(state.camPitch);
+      const ry = ty * cosP - rz1 * sinP, rz = ty * sinP + rz1 * cosP;
+      const camDist = state.deviceMode === 'mobile' ? 155 : 140;
+      const depth = camDist - rz;
+      if (depth < 5) return null;
+      const fovScale = (camDist * state.camZoom) / depth;
+      const centerYRatio = state.deviceMode === 'mobile' ? 0.62 : 0.58;
+      return { sx: width * 0.5 + rx * fovScale, sy: height * centerYRatio - ry * fovScale, depth, scale: fovScale };
+    }
+
+    function shadeColor(hex, brightness) {
+      const c = hex.replace('#', '');
+      const r = parseInt(c.substring(0, 2), 16), g = parseInt(c.substring(2, 4), 16), b = parseInt(c.substring(4, 6), 16);
+      return `rgb(${Math.min(255, Math.max(0, Math.round(r * brightness)))},${Math.min(255, Math.max(0, Math.round(g * brightness)))},${Math.min(255, Math.max(0, Math.round(b * brightness)))})`;
+    }
+
+    function addBoxFaces(faces, cx, cy, cz, dx, dy, dz, hexColor, transformFn = null, subdiv = 2) {
+      const hx = dx / 2, hy = dy / 2, hz = dz / 2;
+      const nx = Math.max(1, Math.round(dx / 6) * subdiv);
+      const ny = Math.max(1, Math.round(dy / 6) * subdiv);
+      const nz = Math.max(1, Math.round(dz / 6) * subdiv);
+
+      function pushSubGrid(origin, uVec, vVec, uSteps, vSteps, faceNormal) {
+        for (let iu = 0; iu < uSteps; iu++) {
+          for (let iv = 0; iv < vSteps; iv++) {
+            const u0 = iu / uSteps, u1 = (iu + 1) / uSteps, v0 = iv / vSteps, v1 = (iv + 1) / vSteps;
+            let pts = [
+              { x: origin.x + uVec.x * u0 + vVec.x * v0, y: origin.y + uVec.y * u0 + vVec.y * v0, z: origin.z + uVec.z * u0 + vVec.z * v0 },
+              { x: origin.x + uVec.x * u1 + vVec.x * v0, y: origin.y + uVec.y * u1 + vVec.y * v0, z: origin.z + uVec.z * u1 + vVec.z * v0 },
+              { x: origin.x + uVec.x * u1 + vVec.x * v1, y: origin.y + uVec.y * u1 + vVec.y * v1, z: origin.z + uVec.z * u1 + vVec.z * v1 },
+              { x: origin.x + uVec.x * u0 + vVec.x * v1, y: origin.y + uVec.y * u0 + vVec.y * v1, z: origin.z + uVec.z * u0 + vVec.z * v1 }
+            ];
+            let norm = { ...faceNormal };
+            if (transformFn) {
+              pts = pts.map(p => transformFn(p));
+              const p0 = transformFn({ x: 0, y: 0, z: 0 }), pn = transformFn(faceNormal);
+              norm = { x: pn.x - p0.x, y: pn.y - p0.y, z: pn.z - p0.z };
+            }
+            faces.push({ pts, norm, color: hexColor });
+          }
+        }
+      }
+
+      pushSubGrid({ x: cx - hx, y: cy + hy, z: cz - hz }, { x: dx, y: 0, z: 0 }, { x: 0, y: 0, z: dz }, nx, nz, { x: 0, y: 1, z: 0 });
+      pushSubGrid({ x: cx - hx, y: cy - hy, z: cz - hz }, { x: dx, y: 0, z: 0 }, { x: 0, y: 0, z: dz }, nx, nz, { x: 0, y: -1, z: 0 });
+      pushSubGrid({ x: cx - hx, y: cy - hy, z: cz + hz }, { x: dx, y: 0, z: 0 }, { x: 0, y: dy, z: 0 }, nx, ny, { x: 0, y: 0, z: 1 });
+      pushSubGrid({ x: cx - hx, y: cy - hy, z: cz - hz }, { x: dx, y: 0, z: 0 }, { x: 0, y: dy, z: 0 }, nx, ny, { x: 0, y: 0, z: -1 });
+      pushSubGrid({ x: cx + hx, y: cy - hy, z: cz - hz }, { x: 0, y: dy, z: 0 }, { x: 0, y: 0, z: dz }, ny, nz, { x: 1, y: 0, z: 0 });
+      pushSubGrid({ x: cx - hx, y: cy - hy, z: cz - hz }, { x: 0, y: dy, z: 0 }, { x: 0, y: 0, z: dz }, ny, nz, { x: -1, y: 0, z: 0 });
+    }
+
+    function addProjectileMesh(faces, center, shapeKey, rotAngle = 0) {
+      const col = SHAPES[shapeKey].color;
+      const rotTransform = (p) => {
+        const lx = p.x - center.x, ly = p.y - center.y, lz = p.z - center.z;
+        const c = Math.cos(rotAngle), s = Math.sin(rotAngle);
+        return { x: center.x + lx * c - ly * s, y: center.y + lx * s + ly * c, z: center.z + lz };
+      };
+
+      if (shapeKey === 'cube') {
+        addBoxFaces(faces, center.x, center.y, center.z, 2.2, 2.2, 2.2, col, rotTransform, 1);
+      } else if (shapeKey === 'disk') {
+        const r = 2.4, h = 0.5, segs = 12;
+        for (let i = 0; i < segs; i++) {
+          const a0 = (i / segs) * Math.PI * 2, a1 = ((i + 1) / segs) * Math.PI * 2;
+          const x0 = center.x + Math.cos(a0) * r, z0 = center.z + Math.sin(a0) * r;
+          const x1 = center.x + Math.cos(a1) * r, z1 = center.z + Math.sin(a1) * r;
+          faces.push({
+            pts: [rotTransform({ x: center.x, y: center.y + h/2, z: center.z }), rotTransform({ x: x0, y: center.y + h/2, z: z0 }), rotTransform({ x: x1, y: center.y + h/2, z: z1 })],
+            norm: { x: 0, y: 1, z: 0 }, color: col
+          });
+          faces.push({
+            pts: [rotTransform({ x: x0, y: center.y - h/2, z: z0 }), rotTransform({ x: x1, y: center.y - h/2, z: z1 }), rotTransform({ x: x1, y: center.y + h/2, z: z1 }), rotTransform({ x: x0, y: center.y + h/2, z: z0 })],
+            norm: { x: Math.cos(a0), y: 0, z: Math.sin(a0) }, color: col
+          });
+        }
+      } else if (shapeKey === 'cone') {
+        const r = 1.5, h = 4.5, segs = 12;
+        const tip = rotTransform({ x: center.x + h * 0.5, y: center.y + h * 0.3, z: center.z });
+        for (let i = 0; i < segs; i++) {
+          const a0 = (i / segs) * Math.PI * 2, a1 = ((i + 1) / segs) * Math.PI * 2;
+          const p0 = rotTransform({ x: center.x - h * 0.3, y: center.y + Math.cos(a0) * r, z: center.z + Math.sin(a0) * r });
+          const p1 = rotTransform({ x: center.x - h * 0.3, y: center.y + Math.cos(a1) * r, z: center.z + Math.sin(a1) * r });
+          faces.push({ pts: [tip, p0, p1], norm: { x: 0.3, y: Math.cos(a0), z: Math.sin(a0) }, color: col });
+        }
+      } else {
+        const r = 1.35, rings = 6, segs = 10;
+        for (let ir = 0; ir < rings; ir++) {
+          const p0 = (ir / rings) * Math.PI, p1 = ((ir + 1) / rings) * Math.PI;
+          for (let is = 0; is < segs; is++) {
+            const t0 = (is / segs) * Math.PI * 2, t1 = ((is + 1) / segs) * Math.PI * 2;
+            faces.push({
+              pts: [
+                { x: center.x + r * Math.sin(p0) * Math.cos(t0), y: center.y + r * Math.cos(p0), z: center.z + r * Math.sin(p0) * Math.sin(t0) },
+                { x: center.x + r * Math.sin(p0) * Math.cos(t1), y: center.y + r * Math.cos(p0), z: center.z + r * Math.sin(p0) * Math.sin(t1) },
+                { x: center.x + r * Math.sin(p1) * Math.cos(t1), y: center.y + r * Math.cos(p1), z: center.z + r * Math.sin(p1) * Math.sin(t1) },
+                { x: center.x + r * Math.sin(p1) * Math.cos(t0), y: center.y + r * Math.cos(p1), z: center.z + r * Math.sin(p1) * Math.sin(t0) }
+              ],
+              norm: { x: Math.sin(p0) * Math.cos(t0), y: Math.cos(p0), z: Math.sin(p0) * Math.sin(t0) }, color: col
+            });
+          }
+        }
+      }
+    }
+
+    let lastTime = performance.now();
+    function animate(now) {
+      const dt = Math.min(0.05, (now - lastTime) / 1000);
+      lastTime = now;
+      const timeScale = state.slowMo ? 0.2 : 1.0;
+
+      if (state.catapultPhase === 'cocking') {
+        state.armAngleDeg -= 95 * dt;
+        if (state.armAngleDeg <= 8) {
+          state.armAngleDeg = 8;
+          state.catapultPhase = 'cocked';
+          updateStatusUI('Взведено на фиксатор (готово)', 'bg-amber-500');
+        }
+        updateHUD();
+      } else if (state.catapultPhase === 'firing') {
+        state.armAngleDeg += 480 * dt * timeScale;
+        if (state.armAngleDeg >= 45) {
+          state.armAngleDeg = 45;
+          state.catapultPhase = 'flight';
+          state.projectile = { sim: simulateFlightTrajectory(state.selectedShape, true), idx: 0, rot: 0 };
+          updateStatusUI('Удар в 45° — груз в полёте!', 'bg-sky-500');
+        }
+        updateHUD();
+      } else if (state.catapultPhase === 'flight' && state.projectile) {
+        state.projectile.idx += (state.slowMo ? 0.9 : 4.2);
+        state.projectile.rot += 10 * dt * timeScale;
+        const pts = state.projectile.sim.pointsCm;
+        if (state.projectile.idx >= pts.length - 1) {
+          state.projectile.idx = pts.length - 1;
+          state.trajectories.push(state.projectile.sim);
+          const rCm = state.projectile.sim.rangeCm;
+          document.getElementById('hudLastRange').textContent = `${rCm.toFixed(1)} см`;
+          state.results[state.selectedShape].shift();
+          state.results[state.selectedShape].push(rCm);
+          renderTable();
+          state.catapultPhase = 'rest';
+          updateStatusUI(`Касание пола: ${rCm.toFixed(1)} см!`, 'bg-emerald-500');
+        }
+      }
+
+      drawScene();
+      requestAnimationFrame(animate);
+    }
+
+    function drawScene() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      if (canvas.width !== Math.round(rect.width * dpr) || canvas.height !== Math.round(rect.height * dpr)) {
+        canvas.width = Math.round(rect.width * dpr);
+        canvas.height = Math.round(rect.height * dpr);
+      }
+      ctx.save();
+      ctx.scale(dpr, dpr);
+      const W = rect.width, H = rect.height;
+      const isLight = document.documentElement.classList.contains('light');
+      ctx.fillStyle = isLight ? '#f8fafc' : '#0b1120';
+      ctx.fillRect(0, 0, W, H);
+
+      drawFloorAndRuler(W, H, isLight);
+
+      const faces = [];
+      const phys = computePhysics();
+      const woodBase = '#d97706', woodPost = '#b45309', woodArm = '#f59e0b', woodStop = '#92400e', steelCol = '#94a3b8';
+      const workR = phys.workingRadiusCm, pivotY = phys.pivotYCm;
+      const pivotX = workR * Math.cos(Math.PI / 4) * 0.55;
+
+      const baseLeftX = pivotX - 24, baseRightX = pivotX + 12;
+      const baseLen = baseRightX - baseLeftX, baseMidX = (baseLeftX + baseRightX) / 2;
+
+      addBoxFaces(faces, baseMidX, 0.75, -6.0, baseLen, 1.5, 1.5, woodBase);
+      addBoxFaces(faces, baseMidX, 0.75,  6.0, baseLen, 1.5, 1.5, woodBase);
+      addBoxFaces(faces, baseLeftX + 2.0, 0.75, 0, 2.0, 1.5, 10.5, woodPost);
+      addBoxFaces(faces, pivotX,          0.75, 0, 2.5, 1.5, 10.5, woodPost);
+      addBoxFaces(faces, baseRightX - 1.5,0.75, 0, 2.0, 1.5, 10.5, woodPost);
+
+      const postH = state.postHeightCm;
+      addBoxFaces(faces, pivotX, 1.5 + postH / 2, -4.5, 1.8, postH + 1.5, 1.5, woodPost);
+      addBoxFaces(faces, pivotX, 1.5 + postH / 2,  4.5, 1.8, postH + 1.5, 1.5, woodPost);
+
+      const stopperX = pivotX - 5.5, stopperY = pivotY + 3.8;
+      addBoxFaces(faces, stopperX, (stopperY + 1.5) / 2, -4.5, 1.5, stopperY - 1.0, 1.5, woodStop);
+      addBoxFaces(faces, stopperX, (stopperY + 1.5) / 2,  4.5, 1.5, stopperY - 1.0, 1.5, woodStop);
+      addBoxFaces(faces, stopperX, stopperY, 0, 1.8, 1.6, 11.5, '#dc2626');
+
+      addBoxFaces(faces, pivotX, pivotY, 0, 0.6, 0.6, 13.0, steelCol);
+
+      const triggerX = pivotX - workR * 0.92;
+      addBoxFaces(faces, triggerX, 2.1, 0, 0.8, 1.8, 3.0, '#eab308');
+
+      const tailLen = state.mountType === 'direct' ? 5.0 : (state.armLengthCm - workR);
+      const armCenterLocalS = (tailLen - workR) / 2;
+
+      const armTransform = (pt) => {
+        const s = pt.x, n = pt.y, rad = (state.armAngleDeg * Math.PI) / 180;
+        const dirX = Math.cos(rad), dirY = -Math.sin(rad), normX = Math.sin(rad), normY = Math.cos(rad);
+        return { x: pivotX + s * dirX + n * normX, y: pivotY + s * dirY + n * normY, z: pt.z };
+      };
+
+      addBoxFaces(faces, armCenterLocalS, 0, 0, state.armLengthCm, 1.5, 1.5, woodArm, armTransform, 3);
+
+      const basketLocalS = -workR + 1.8;
+      addBoxFaces(faces, basketLocalS, 1.0, 0, 3.6, 0.5, 3.6, '#78350f', armTransform, 1);
+      addBoxFaces(faces, basketLocalS - 1.6, 1.7, 0, 0.5, 1.2, 3.6, '#78350f', armTransform, 1);
+      addBoxFaces(faces, basketLocalS + 1.6, 1.7, 0, 0.5, 1.2, 3.6, '#78350f', armTransform, 1);
+      addBoxFaces(faces, basketLocalS, 1.7, -1.6, 3.2, 1.2, 0.5, '#78350f', armTransform, 1);
+      addBoxFaces(faces, basketLocalS, 1.7,  1.6, 3.2, 1.2, 0.5, '#78350f', armTransform, 1);
+
+      const basketWorldPos = armTransform({ x: basketLocalS, y: 2.3, z: 0 });
+      if (state.catapultPhase === 'flight' && state.projectile) {
+        const pts = state.projectile.sim.pointsCm;
+        const idx = Math.min(pts.length - 1, Math.floor(state.projectile.idx));
+        addProjectileMesh(faces, pts[idx], state.selectedShape, state.projectile.rot);
+      } else {
+        addProjectileMesh(faces, basketWorldPos, state.selectedShape, 0);
+      }
+
+      const lightDir = { x: 0.45, y: 0.8, z: 0.38 };
+      const projectedFaces = [];
+      for (const f of faces) {
+        const ppts = [];
+        let depthSum = 0, valid = true;
+        for (const v of f.pts) {
+          const pr = projectPoint(v.x, v.y, v.z, W, H);
+          if (!pr) { valid = false; break; }
+          ppts.push(pr); depthSum += pr.depth;
+        }
+        if (!valid) continue;
+        const nLen = Math.hypot(f.norm.x, f.norm.y, f.norm.z) || 1;
+        const dot = (f.norm.x * lightDir.x + f.norm.y * lightDir.y + f.norm.z * lightDir.z) / nLen;
+        const brightness = 0.68 + 0.35 * Math.max(-0.3, dot);
+        projectedFaces.push({ ppts, avgDepth: depthSum / ppts.length, fill: shadeColor(f.color, brightness), stroke: shadeColor(f.color, brightness * 0.82) });
+      }
+
+      projectedFaces.sort((a, b) => b.avgDepth - a.avgDepth);
+      for (const pf of projectedFaces) {
+        ctx.beginPath();
+        ctx.moveTo(pf.ppts[0].sx, pf.ppts[0].sy);
+        for (let i = 1; i < pf.ppts.length; i++) ctx.lineTo(pf.ppts[i].sx, pf.ppts[i].sy);
+        ctx.closePath();
+        ctx.fillStyle = pf.fill; ctx.fill();
+        ctx.strokeStyle = pf.stroke; ctx.lineWidth = 0.6; ctx.stroke();
+      }
+
+      drawRubberBands(W, H, armTransform, workR, tailLen, pivotX, baseRightX);
+      drawTriggerLock(W, H, armTransform, workR, triggerX);
+      drawTrajectories(W, H, phys, isLight);
+      if (state.showDims) drawDimensionsAndProtractor(W, H, pivotX, pivotY, stopperX, stopperY, phys, isLight);
+      if (state.showLabels) drawPartCallouts(W, H, pivotX, pivotY, stopperX, stopperY, basketWorldPos, triggerX, isLight);
+
+      ctx.restore();
+    }
+
+    function drawRubberBands(W, H, armTransform, workR, tailLen, pivotX, baseRightX) {
+      const attachLocalS = state.mountType === 'direct' ? (-workR + state.bandOffsetCm) : (tailLen - 1.5);
+      const leftAttach  = armTransform({ x: attachLocalS, y: 0, z: -1.2 });
+      const rightAttach = armTransform({ x: attachLocalS, y: 0, z:  1.2 });
+      const leftAnchor = state.mountType === 'direct' ? { x: pivotX + 4.5, y: 2.2, z: -4.2 } : { x: baseRightX - 1.5, y: 1.5, z: -3.5 };
+      const rightAnchor = state.mountType === 'direct' ? { x: pivotX + 4.5, y: 2.2, z:  4.2 } : { x: baseRightX - 1.5, y: 1.5, z:  3.5 };
+      const tensionRatio = (45 - state.armAngleDeg) / 37;
+
+      ctx.save();
+      for (const [pA, pB] of [[leftAttach, leftAnchor], [rightAttach, rightAnchor]]) {
+        const sA = projectPoint(pA.x, pA.y, pA.z, W, H), sB = projectPoint(pB.x, pB.y, pB.z, W, H);
+        if (!sA || !sB) continue;
+        ctx.beginPath(); ctx.moveTo(sA.sx, sA.sy); ctx.lineTo(sB.sx, sB.sy);
+        ctx.strokeStyle = tensionRatio > 0.5 ? '#ef4444' : '#10b981';
+        ctx.lineWidth = Math.max(2.5, (4.2 - tensionRatio * 1.2) * (sA.scale * 0.08));
+        ctx.lineCap = 'round'; ctx.stroke();
+        ctx.fillStyle = '#fde047';
+        ctx.beginPath(); ctx.arc(sA.sx, sA.sy, 3.2, 0, Math.PI * 2); ctx.arc(sB.sx, sB.sy, 3.2, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    function drawTriggerLock(W, H, armTransform, workR, triggerX) {
+      const pBase = projectPoint(triggerX, 2.5, 0, W, H);
+      const armTip = armTransform({ x: -workR + 0.8, y: -0.5, z: 0 });
+      const pArm = projectPoint(armTip.x, armTip.y, armTip.z, W, H);
+      if (!pBase || !pArm) return;
+      if (state.catapultPhase === 'cocked' || state.catapultPhase === 'cocking') {
+        ctx.save();
+        ctx.beginPath(); ctx.moveTo(pBase.sx, pBase.sy); ctx.lineTo(pArm.sx, pArm.sy);
+        ctx.strokeStyle = '#eab308'; ctx.lineWidth = 2.5; ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    function drawFloorAndRuler(W, H, isLight) {
+      ctx.save();
+      ctx.strokeStyle = isLight ? 'rgba(148, 163, 184, 0.32)' : 'rgba(148, 163, 184, 0.14)';
+      ctx.lineWidth = 1;
+      for (let x = -30; x <= 300; x += 15) {
+        const p1 = projectPoint(x, 0, -24, W, H), p2 = projectPoint(x, 0, 24, W, H);
+        if (p1 && p2) { ctx.beginPath(); ctx.moveTo(p1.sx, p1.sy); ctx.lineTo(p2.sx, p2.sy); ctx.stroke(); }
+      }
+      for (let z = -24; z <= 24; z += 8) {
+        const p1 = projectPoint(-30, 0, z, W, H), p2 = projectPoint(300, 0, z, W, H);
+        if (p1 && p2) { ctx.beginPath(); ctx.moveTo(p1.sx, p1.sy); ctx.lineTo(p2.sx, p2.sy); ctx.stroke(); }
+      }
+      const rStart = projectPoint(0, 0.1, 10, W, H), rEnd = projectPoint(300, 0.1, 10, W, H);
+      if (rStart && rEnd) {
+        ctx.beginPath(); ctx.moveTo(rStart.sx, rStart.sy); ctx.lineTo(rEnd.sx, rEnd.sy);
+        ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 3; ctx.stroke();
+      }
+      ctx.font = '600 10px sans-serif';
+      for (let x = 0; x <= 300; x += 25) {
+        const pt = projectPoint(x, 0.1, 10, W, H);
+        if (pt && pt.sx > 0 && pt.sx < W) {
+          ctx.beginPath(); ctx.arc(pt.sx, pt.sy, x === 0 ? 4 : 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = x === 0 ? '#10b981' : '#f59e0b'; ctx.fill();
+          if (x % 50 === 0 || x === 0) {
+            ctx.fillStyle = isLight ? '#0f172a' : '#f8fafc';
+            ctx.fillText(x === 0 ? '0 см' : `${x} см`, pt.sx - 10, pt.sy + 14);
+          }
+        }
+      }
+      ctx.restore();
+    }
+
+    function drawTrajectories(W, H, phys, isLight) {
+      ctx.save();
+      const g = 9.8, alpha = Math.PI / 4, v0 = phys.v * 0.72;
+      ctx.beginPath();
+      let started = false;
+      for (let t = 0; t <= 1.5; t += 0.025) {
+        const xCm = v0 * Math.cos(alpha) * t * 100;
+        const yCm = phys.hCm + (v0 * Math.sin(alpha) * t - 0.5 * g * t * t) * 100;
+        if (yCm < 0) break;
+        const pr = projectPoint(xCm, yCm, 0, W, H);
+        if (pr) { if (!started) { ctx.moveTo(pr.sx, pr.sy); started = true; } else ctx.lineTo(pr.sx, pr.sy); }
+      }
+      ctx.setLineDash([5, 5]);
+      ctx.strokeStyle = isLight ? 'rgba(100,116,139,0.6)' : 'rgba(148,163,184,0.5)';
+      ctx.lineWidth = 1.5; ctx.stroke(); ctx.setLineDash([]);
+
+      for (const tr of state.trajectories) {
+        ctx.beginPath();
+        let s = false;
+        for (let i = 0; i < tr.pointsCm.length; i += 3) {
+          const p = tr.pointsCm[i], pr = projectPoint(p.x, p.y, p.z, W, H);
+          if (pr) { if (!s) { ctx.moveTo(pr.sx, pr.sy); s = true; } else ctx.lineTo(pr.sx, pr.sy); }
+        }
+        ctx.strokeStyle = tr.color; ctx.lineWidth = 2.2; ctx.stroke();
+        const lastP = tr.pointsCm[tr.pointsCm.length - 1];
+        const prEnd = projectPoint(lastP.x, 0.2, 0, W, H);
+        if (prEnd) {
+          ctx.fillStyle = tr.color;
+          ctx.beginPath(); ctx.arc(prEnd.sx, prEnd.sy, 4.5, 0, Math.PI * 2); ctx.fill();
+          ctx.font = 'bold 11px sans-serif';
+          ctx.fillText(`${SHAPES[tr.shapeKey].name}: ${tr.rangeCm} см`, prEnd.sx - 25, prEnd.sy - 8);
+        }
+      }
+
+      if (state.catapultPhase === 'flight' && state.projectile) {
+        const tr = state.projectile.sim;
+        const maxIdx = Math.min(tr.pointsCm.length - 1, Math.floor(state.projectile.idx));
+        ctx.beginPath();
+        let s = false;
+        for (let i = 0; i <= maxIdx; i += 2) {
+          const p = tr.pointsCm[i], pr = projectPoint(p.x, p.y, p.z, W, H);
+          if (pr) { if (!s) { ctx.moveTo(pr.sx, pr.sy); s = true; } else ctx.lineTo(pr.sx, pr.sy); }
+        }
+        ctx.strokeStyle = tr.color; ctx.lineWidth = 2.8; ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function drawDimensionsAndProtractor(W, H, pivotX, pivotY, stopperX, stopperY, phys, isLight) {
+      ctx.save();
+      const pPivot = projectPoint(pivotX, pivotY, 5.5, W, H);
+      if (pPivot) {
+        const rPx = Math.max(20, pPivot.scale * 4.5);
+        ctx.beginPath();
+        ctx.arc(pPivot.sx, pPivot.sy, rPx, Math.PI, Math.PI + (state.armAngleDeg * Math.PI) / 180, false);
+        ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.stroke();
+        ctx.beginPath(); ctx.setLineDash([3, 3]);
+        ctx.moveTo(pPivot.sx - rPx * 1.3, pPivot.sy); ctx.lineTo(pPivot.sx + rPx * 0.4, pPivot.sy);
+        ctx.strokeStyle = '#10b981'; ctx.lineWidth = 1.2; ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = '#10b981'; ctx.font = 'bold 10px sans-serif';
+        ctx.fillText(`α = ${state.armAngleDeg.toFixed(0)}°`, pPivot.sx - rPx - 28, pPivot.sy - 8);
+      }
+      const pFloor0 = projectPoint(0, 0, 0, W, H), pTopH = projectPoint(0, phys.hCm, 0, W, H);
+      if (pFloor0 && pTopH) {
+        ctx.beginPath(); ctx.setLineDash([4, 4]);
+        ctx.moveTo(pFloor0.sx, pFloor0.sy); ctx.lineTo(pTopH.sx, pTopH.sy);
+        ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.8; ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = '#38bdf8'; ctx.font = 'bold 10px sans-serif';
+        ctx.fillText(`h=${phys.hCm.toFixed(1)}см`, pTopH.sx + 5, (pFloor0.sy + pTopH.sy) / 2);
+      }
+      ctx.restore();
+    }
+
+    function drawPartCallouts(W, H, pivotX, pivotY, stopperX, stopperY, basketPos, triggerX, isLight) {
+      const isMob = state.deviceMode === 'mobile';
+      const sFactor = isMob ? 0.68 : 1.0;
+      const callouts = [
+        { pos: { x: pivotX - 8, y: 0.8, z: 6.5 }, text: isMob ? '1. Основание' : '1. Основание (15×15 мм)', dx: -26 * sFactor, dy: 22 * sFactor },
+        { pos: { x: pivotX, y: pivotY * 0.55, z: -4.5 }, text: `2. Опора (${state.postHeightCm} см)`, dx: 26 * sFactor, dy: 0 },
+        { pos: { x: pivotX, y: pivotY, z: -6.5 }, text: isMob ? '3. Ось Ø5мм' : '3. Ось вращения (Ø 5 мм)', dx: 26 * sFactor, dy: -16 * sFactor },
+        { pos: { x: (pivotX + basketPos.x) * 0.5, y: (pivotY + basketPos.y) * 0.5, z: 0 }, text: `4. Плечо (${state.armLengthCm} см)`, dx: -48 * sFactor, dy: -20 * sFactor },
+        { pos: { x: stopperX, y: stopperY + 0.8, z: 0 }, text: '5. Ограничитель 45°', dx: 16 * sFactor, dy: -22 * sFactor },
+        { pos: { x: pivotX + 1.5, y: 4.5, z: 3.5 }, text: '6. 2 резинки', dx: 30 * sFactor, dy: 14 * sFactor },
+        { pos: basketPos, text: `7. Корзина (${SHAPES[state.selectedShape].name})`, dx: -55 * sFactor, dy: -24 * sFactor },
+        { pos: { x: triggerX, y: 2.2, z: 0 }, text: '8. Фиксатор', dx: -45 * sFactor, dy: 20 * sFactor }
+      ];
+      ctx.save();
+      ctx.font = isMob ? '600 10px sans-serif' : '600 11px sans-serif';
+      for (const c of callouts) {
+        const pr = projectPoint(c.pos.x, c.pos.y, c.pos.z, W, H);
+        if (!pr || pr.sx < 14 || pr.sx > W - 14 || pr.sy < 14 || pr.sy > H - 14) continue;
+        const lx = Math.max(42, Math.min(W - 42, pr.sx + c.dx));
+        const ly = Math.max(20, Math.min(H - 16, pr.sy + c.dy));
+        ctx.beginPath(); ctx.moveTo(pr.sx, pr.sy); ctx.lineTo(lx, ly);
+        ctx.strokeStyle = isLight ? 'rgba(15,23,42,0.45)' : 'rgba(248,250,252,0.45)';
+        ctx.lineWidth = 1.1; ctx.stroke();
+        ctx.beginPath(); ctx.arc(pr.sx, pr.sy, 2.8, 0, Math.PI * 2);
+        ctx.fillStyle = '#38bdf8'; ctx.fill();
+        const padX = isMob ? 4 : 6, padY = isMob ? 3 : 4, tw = ctx.measureText(c.text).width;
+        ctx.fillStyle = isLight ? 'rgba(255,255,255,0.92)' : 'rgba(15,23,42,0.88)';
+        ctx.strokeStyle = isLight ? 'rgba(148,163,184,0.6)' : 'rgba(71,85,105,0.8)';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.roundRect(lx - tw / 2 - padX, ly - 8 - padY, tw + padX * 2, 15 + padY, 4);
+        ctx.fill(); ctx.stroke();
+        ctx.fillStyle = isLight ? '#0f172a' : '#f8fafc';
+        ctx.fillText(c.text, lx - tw / 2, ly + 3);
+      }
+      ctx.restore();
+    }
+
+    // Auto-detect phone screen width on startup, but user can toggle anytime in top-right corner
+    if (window.innerWidth < 768) {
+      setDeviceMode('mobile');
+    } else {
+      setDeviceMode('pc');
+    }
+    updateHUD();
+    renderTable();
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
