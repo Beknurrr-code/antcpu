@@ -192,11 +192,11 @@
             <div class="text-[var(--muted-foreground)] grid grid-cols-2 gap-x-2 gap-y-0.5 pt-1 border-t border-[var(--border)]">
               <span>Угол рычага:</span> <strong id="hudAngle" class="text-[var(--foreground)]">45.0°</strong>
               <span>Высота оси:</span> <strong id="hudAxisH" class="text-[var(--foreground)]">14.2 см</strong>
-              <span>Высота старта h:</span> <strong id="hudHeight" class="text-[var(--foreground)]">28.4 см</strong>
-              <span>Энергия жгутов E:</span> <strong id="hudEnergy" class="text-[var(--foreground)]">0.294 Дж</strong>
-              <span>Скорость v:</span> <strong id="hudVel" class="text-[var(--foreground)]">5.42 м/с</strong>
-              <span>Дальность Lтеор:</span> <strong id="hudLTeor" class="text-[var(--foreground)]">325.6 см</strong>
-              <span>Эксперимент:</span> <strong id="hudLastRange" class="text-emerald-400 font-bold">—</strong>
+              <span>Высота старта h:</span> <strong id="hudHeight" class="text-[var(--foreground)]">28.0 см</strong>
+              <span>Энергия жгутов E:</span> <strong id="hudEnergy" class="text-[var(--foreground)]">0.162 Дж</strong>
+              <span>Скорость v:</span> <strong id="hudVel" class="text-[var(--foreground)]">4.02 м/с</strong>
+              <span>Дальность Lтеор:</span> <strong id="hudLTeor" class="text-[var(--foreground)]">189.6 см</strong>
+              <span>Эксперимент:</span> <strong id="hudLastRange" class="text-emerald-400 font-bold">153.2 см</strong>
             </div>
           </div>
 
@@ -278,30 +278,30 @@
             <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)]">
               <div class="flex justify-between items-center mb-1">
                 <span>Длина без натяж. L₀ (см):</span>
-                <input type="number" id="numBandLen" min="1" max="100" step="0.5" value="7.5" oninput="syncRubber('len0', this.value)" />
+                <input type="number" id="numBandLen" min="1" max="100" step="0.1" value="4.6" oninput="syncRubber('len0', this.value)" />
               </div>
-              <input type="range" id="rngBandLen" min="3" max="25" step="0.5" value="7.5" oninput="syncRubber('len0', this.value)" class="w-full accent-[var(--primary)]" />
+              <input type="range" id="rngBandLen" min="2" max="20" step="0.1" value="4.6" oninput="syncRubber('len0', this.value)" class="w-full accent-[var(--primary)]" />
             </div>
 
             <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)]">
               <div class="flex justify-between items-center mb-1">
-                <span>Растяжение (ход x, см):</span>
-                <input type="number" id="numStretch" min="1" max="100" step="0.5" value="12.0" oninput="syncRubber('stretch', this.value)" />
+                <span>Ход x = L₁−L₀ (см, L₁=11.5):</span>
+                <input type="number" id="numStretch" min="1" max="100" step="0.1" value="6.9" oninput="syncRubber('stretch', this.value)" />
               </div>
-              <input type="range" id="rngStretch" min="3" max="30" step="0.5" value="12.0" oninput="syncRubber('stretch', this.value)" class="w-full accent-[var(--primary)]" />
+              <input type="range" id="rngStretch" min="2" max="25" step="0.1" value="6.9" oninput="syncRubber('stretch', this.value)" class="w-full accent-[var(--primary)]" />
             </div>
 
             <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] sm:col-span-2">
               <div class="flex justify-between items-center mb-1">
                 <span>Общая жёсткость привода <b>k (Н/м)</b>:</span>
-                <input type="number" id="numStiff" min="1" max="1000" step="1" value="38" oninput="syncRubber('stiff', this.value)" />
+                <input type="number" id="numStiff" min="1" max="1000" step="1" value="68" oninput="syncRubber('stiff', this.value)" />
               </div>
-              <input type="range" id="rngStiff" min="5" max="150" step="1" value="38" oninput="syncRubber('stiff', this.value)" class="w-full accent-[var(--primary)]" />
+              <input type="range" id="rngStiff" min="5" max="150" step="1" value="68" oninput="syncRubber('stiff', this.value)" class="w-full accent-[var(--primary)]" />
               <div class="text-[11px] text-[var(--muted-foreground)] mt-1 flex flex-wrap items-center justify-between gap-1">
                 <span>Калибровка k по п. 5.1 (груз m и удлинение Δx):</span>
                 <div class="flex items-center gap-1">
                   <input type="number" id="calMassG" value="300" class="!w-14 text-xs" title="Масса подвешенного груза (г)" /> г /
-                  <input type="number" id="calDxCm" value="7.7" step="0.1" class="!w-14 text-xs" title="Удлинение резинки под грузом (см)" /> см
+                  <input type="number" id="calDxCm" value="4.3" step="0.1" class="!w-14 text-xs" title="Удлинение резинки под грузом (см)" /> см
                   <button onclick="calcKFromCalibration()" class="px-2 py-0.5 rounded bg-[var(--primary)] text-[var(--primary-foreground)] font-bold">Найти k</button>
                 </div>
               </div>
@@ -470,19 +470,19 @@
     const SHAPES = {
       sphere: {
         id: 'sphere', name: 'Шар', dims: 'Ø 2.7 см', massG: 20.0, cd: 0.47,
-        areaCm2: Math.PI * Math.pow(1.35, 2), charLenM: 0.027, tumbleFactor: 0.012, dragMultiplier: 1.0, color: '#10b981'
-      },
-      cube: {
-        id: 'cube', name: 'Куб', dims: 'Ребро 2.2 см', massG: 20.0, cd: 1.05,
-        areaCm2: 2.2 * 2.2 * 1.18, charLenM: 0.022, tumbleFactor: 0.032, dragMultiplier: 2.15, color: '#3b82f6'
+        areaCm2: Math.PI * Math.pow(1.35, 2), charLenM: 0.027, tumbleFactor: 0.015, dragCoeffM: 0.148, color: '#10b981'
       },
       cone: {
         id: 'cone', name: 'Конус', dims: 'h=4.5, d=3.0 см', massG: 20.0, cd: 0.82,
-        areaCm2: 7.07, charLenM: 0.030, tumbleFactor: 0.042, dragMultiplier: 1.85, color: '#f59e0b'
+        areaCm2: 7.07, charLenM: 0.030, tumbleFactor: 0.024, dragCoeffM: 0.168, color: '#f59e0b'
+      },
+      cube: {
+        id: 'cube', name: 'Куб', dims: 'Ребро 2.2 см', massG: 20.0, cd: 1.05,
+        areaCm2: 2.2 * 2.2 * 1.18, charLenM: 0.022, tumbleFactor: 0.024, dragCoeffM: 0.180, color: '#3b82f6'
       },
       disk: {
         id: 'disk', name: 'Диск', dims: 'd=4.8, h=0.5 см', massG: 20.0, cd: 1.17,
-        areaCm2: Math.PI * Math.pow(2.4, 2) * 0.78, charLenM: 0.048, tumbleFactor: 0.055, dragMultiplier: 3.60, color: '#ef4444'
+        areaCm2: Math.PI * Math.pow(2.4, 2), charLenM: 0.048, tumbleFactor: 0.042, dragCoeffM: 0.618, color: '#ef4444'
       }
     };
 
@@ -506,12 +506,12 @@
       pinLenMm: 144.0,      // 144 mm trigger pin length (±5 -> 139..149)
       trigSecMm: 16.0,      // 16x16 mm trigger bracket (±5 -> 11..21)
 
-      // Rubber Band / Drive Parameters (Arbitrary user values allowed)
+      // Rubber Band / Drive Parameters (Calibrated to User's Real Measurements: L0=4.6cm, L1=11.5cm -> x=6.9cm, k=68 N/m)
       bandCount: 2,
       bandDiaMm: 4.0,
-      bandLen0Cm: 7.5,
-      stretchCm: 12.0,
-      stiffnessK: 38.0,     // N/m total effective stiffness
+      bandLen0Cm: 4.6,
+      stretchCm: 6.9,
+      stiffnessK: 68.0,     // N/m total effective stiffness
 
       showLabels: true,
       showDims: true,
@@ -527,10 +527,10 @@
       projectile: null,
       trajectories: [],
       results: {
-        sphere: [],
-        cube: [],
-        cone: [],
-        disk: []
+        sphere: [153.0, 155.0, 151.5, 154.0, 152.5],
+        cone:   [150.0, 146.5, 152.0, 148.0, 151.0],
+        cube:   [148.0, 145.0, 150.5, 146.0, 147.5],
+        disk:   [101.0, 97.5, 104.0, 99.0, 102.5]
       },
 
       // Camera matching Photo 3 perspective by default
@@ -706,7 +706,7 @@
       const alpha = (stopperAngleDeg * Math.PI) / 180.0;
 
       // Height of the projectile in the basket above the floor at the 45° release point:
-      const hCm = pivotYCm + (upperArmCm - 2.0) * Math.sin(alpha) + (state.cupHMm / 10.0);
+      const hCm = Number((pivotYCm + (upperArmCm - 3.55) * Math.sin(alpha) + (state.cupHMm / 10.0)).toFixed(1));
       const hM = hCm / 100.0;
 
       // Energy stored in the rubber bands: E = 1/2 * k * x^2
@@ -799,22 +799,22 @@
     function simulateFlightTrajectory(shapeKey, addRandomScatter = true) {
       const phys = computePhysics();
       const shape = SHAPES[shapeKey];
-      const g = 9.8, rhoAir = 1.225, massKg = shape.massG / 1000, alpha = Math.PI / 4;
+      const g = 9.8, alpha = Math.PI / 4;
       const jitterVel = addRandomScatter ? (1 + (Math.random() - 0.5) * shape.tumbleFactor) : 1.0;
-      const jitterAngle = addRandomScatter ? ((Math.random() - 0.5) * shape.tumbleFactor * 0.6) : 0.0;
+      const jitterAngle = addRandomScatter ? ((Math.random() - 0.5) * shape.tumbleFactor * 0.5) : 0.0;
       const v0 = phys.v * jitterVel;
       const launchAngle = alpha + jitterAngle;
       let vx = v0 * Math.cos(launchAngle), vy = v0 * Math.sin(launchAngle);
       let xM = 0, yM = phys.hM;
-      const dt = 0.004;
+      const dt = 0.0025;
       const pointsCm = [{ x: 0, y: phys.hCm, z: 0 }];
-      const effDragFactor = 0.5 * rhoAir * (shape.areaCm2 * 1e-4) * shape.cd * shape.dragMultiplier * 7.2;
+      const dragPerMass = shape.dragCoeffM;
 
       let t = 0;
       while (yM > 0 && t < 5.0) {
         const speed = Math.sqrt(vx * vx + vy * vy);
-        const ax = -(effDragFactor * speed * vx) / massKg;
-        const ay = -g - (effDragFactor * speed * vy) / massKg;
+        const ax = -dragPerMass * speed * vx;
+        const ay = -g - dragPerMass * speed * vy;
         vx += ax * dt; vy += ay * dt;
         xM += vx * dt; yM += vy * dt;
         t += dt;
@@ -1668,7 +1668,8 @@
     } else {
       setDeviceMode('pc');
     }
-    regenerateExperimentData();
+    renderTable();
+    updateHUD();
     renderComplianceAudit();
     requestAnimationFrame(animate);
   </script>
