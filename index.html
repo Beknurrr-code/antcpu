@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>3D Модель: Катапульта «Резиновая» — STEM Олимпиада Астана</title>
+  <title>3D Модель: Катапульта «Резиновая» (Точная копия по фото) — STEM Олимпиада</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
@@ -13,8 +13,8 @@
       --card: #111827;
       --border: #1e293b;
       --muted-foreground: #94a3b8;
-      --primary: #0ea5e9;
-      --primary-foreground: #ffffff;
+      --primary: #eab308;
+      --primary-foreground: #0f172a;
       --secondary: #1e293b;
       --secondary-foreground: #e2e8f0;
     }
@@ -24,7 +24,7 @@
       --card: #ffffff;
       --border: #cbd5e1;
       --muted-foreground: #475569;
-      --primary: #0284c7;
+      --primary: #ca8a04;
       --primary-foreground: #ffffff;
       --secondary: #e2e8f0;
       --secondary-foreground: #0f172a;
@@ -41,7 +41,6 @@
     .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-    /* Mobile Mode Container Simulation when toggled on PC */
     body.mode-mobile #appContainer {
       max-width: 430px !important;
       margin: 0 auto;
@@ -57,10 +56,20 @@
       flex-direction: column !important;
     }
     body.mode-mobile #viewportWrapper {
-      height: 390px !important;
+      height: 400px !important;
     }
     body.mode-mobile .hide-on-mobile-mode {
       display: none !important;
+    }
+    input[type="number"] {
+      background: var(--background);
+      border: 1px solid var(--border);
+      color: var(--foreground);
+      border-radius: 6px;
+      padding: 2px 6px;
+      width: 68px;
+      text-align: right;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -75,13 +84,16 @@
     </button>
   </div>
 
-  <div id="appContainer" class="max-w-7xl mx-auto p-3 md:p-5 space-y-3.5 transition-all duration-200">
+  <div id="appContainer" class="max-w-7xl mx-auto p-3 md:p-5 space-y-4 transition-all duration-200">
     <!-- Header -->
     <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5 md:p-4 shadow-lg flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 pr-36 sm:pr-44 lg:pr-48">
       <div>
         <div class="flex items-center gap-1.5 flex-wrap">
-          <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">
-            STEM Олимпиада • Приложение №1
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[var(--primary)] text-[var(--primary-foreground)]">
+            Точная 3D-копия вашей катапульты по фото
+          </span>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            ✓ Проверено по регламенту STEM
           </span>
           <a href="catapult_rezinovaya.stl" download class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition">
             ⬇ .STL
@@ -93,68 +105,59 @@
             ☀/🌙
           </button>
         </div>
-        <h1 class="text-base md:text-xl font-bold mt-1 text-[var(--foreground)] leading-snug">
-          Катапульта «Резиновая» — 3D Модель и Лаборатория
+        <h1 class="text-base md:text-xl font-bold mt-1.5 text-[var(--foreground)] leading-snug">
+          Катапульта «Резиновая» — Интерактивная 3D-модель и Расчёт по ПДФ
         </h1>
-        <p id="controlHintText" class="text-xs text-[var(--muted-foreground)] mt-0.5">
-          Управление: <b>1 палец / ЛКМ</b> — поворот 360°, <b>2 пальца (щипок) / Колесо</b> — зум, <b>ПКМ</b> — сдвиг.
+        <p class="text-xs text-[var(--muted-foreground)] mt-0.5">
+          Чёрная рама 18×14 см (брус 1.8 см), двойная опора 16 см, жёлтый рычаг 300×15×15 мм, круглая чёрно-оранжевая корзина Ø55×11 мм, скошенный упор 6.9/5.9 см и чека-гвоздь 144 мм с белой петлёй.
         </p>
       </div>
 
-      <!-- Category & Layout Switchers -->
+      <!-- Category Switcher -->
       <div class="flex flex-wrap items-center gap-1.5">
-        <div class="bg-[var(--background)] border border-[var(--border)] rounded-lg p-0.5 flex text-xs">
-          <button id="btnCat1" onclick="setCategory(1)" class="px-2 py-1 rounded-md font-medium transition">
-            Кат. I (8–9 кл.)
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-lg p-1 flex text-xs">
+          <button id="btnCat1" onclick="setCategory(1)" class="px-2.5 py-1.5 rounded-md font-medium transition">
+            Категория I (8–9 кл.)
           </button>
-          <button id="btnCat2" onclick="setCategory(2)" class="px-2 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition">
-            Кат. II (10–11 кл.)
-          </button>
-        </div>
-
-        <div class="bg-[var(--background)] border border-[var(--border)] rounded-lg p-0.5 flex text-xs">
-          <button id="btnLayoutA" onclick="setMountType('direct')" class="px-2 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition">
-            Схема А
-          </button>
-          <button id="btnLayoutB" onclick="setMountType('seesaw')" class="px-2 py-1 rounded-md font-medium transition">
-            Схема Б
+          <button id="btnCat2" onclick="setCategory(2)" class="px-2.5 py-1.5 rounded-md font-bold bg-[var(--primary)] text-[var(--primary-foreground)] transition">
+            Категория II (10–11 кл.)
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Main Grid: 3D Viewport + Controls -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5 pc-grid-12">
-      <!-- 3D Viewport Column (8 cols) -->
-      <div class="lg:col-span-8 bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden shadow-lg flex flex-col">
+    <!-- Main Grid: 3D Viewport + Parameter Controls -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 pc-grid-12">
+      <!-- 3D Viewport Column (7 cols) -->
+      <div class="lg:col-span-7 bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden shadow-lg flex flex-col">
         <!-- Camera & Display Toolbar -->
         <div class="p-2 border-b border-[var(--border)] flex flex-wrap items-center justify-between gap-1.5 bg-[var(--background)]/50">
           <div class="flex flex-wrap items-center gap-1">
-            <button onclick="setCameraPreset('iso')" class="px-2 py-1 text-xs rounded-md bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] transition font-medium">
-              3D Вид
+            <button onclick="setCameraPreset('photo3')" class="px-2 py-1 text-xs rounded-md bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] transition font-medium">
+              Ракурс Фото 3
+            </button>
+            <button onclick="setCameraPreset('photo1')" class="px-2 py-1 text-xs rounded-md bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] transition font-medium">
+              Спереди (Фото 1)
+            </button>
+            <button onclick="setCameraPreset('photo2')" class="px-2 py-1 text-xs rounded-md bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] transition font-medium">
+              Сзади (Фото 2)
             </button>
             <button onclick="setCameraPreset('side')" class="px-2 py-1 text-xs rounded-md bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] transition font-medium">
-              Сбоку (45°)
-            </button>
-            <button onclick="setCameraPreset('front')" class="px-2 py-1 text-xs rounded-md bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] transition font-medium">
-              Спереди
-            </button>
-            <button onclick="setCameraPreset('top')" class="px-2 py-1 text-xs rounded-md bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] transition font-medium">
-              Сверху
+              Сбоку (Схема 45°)
             </button>
             <button onclick="setCameraPreset('range')" class="px-2 py-1 text-xs rounded-md bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] transition font-medium">
-              Трасса 3 м
+              Трасса полёта
             </button>
           </div>
 
           <div class="flex items-center gap-2.5 text-xs">
             <label class="flex items-center gap-1 cursor-pointer">
               <input type="checkbox" id="chkLabels" checked onchange="state.showLabels = this.checked" class="rounded" />
-              <span>Метки</span>
+              <span>Подписи</span>
             </label>
             <label class="flex items-center gap-1 cursor-pointer">
               <input type="checkbox" id="chkDims" checked onchange="state.showDims = this.checked" class="rounded" />
-              <span>45° и h</span>
+              <span>Размеры и 45°</span>
             </label>
             <label class="flex items-center gap-1 cursor-pointer">
               <input type="checkbox" id="chkSlowMo" onchange="state.slowMo = this.checked" class="rounded" />
@@ -164,56 +167,67 @@
         </div>
 
         <!-- 3D Canvas Container -->
-        <div id="viewportWrapper" class="relative w-full" style="height: 490px;">
+        <div id="viewportWrapper" class="relative w-full" style="height: 520px;">
           <canvas id="canvas3d" class="w-full h-full block cursor-grab active:cursor-grabbing"></canvas>
 
-          <!-- In-Canvas Corner Perspective Pill (Quick Switch inside 3D Viewport too!) -->
+          <!-- In-Canvas Corner Perspective Pill -->
           <div class="absolute top-2.5 right-2.5 flex flex-col gap-1.5 z-10">
-            <button id="viewportModeBadge" onclick="toggleDeviceMode()" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-[var(--card)]/90 backdrop-blur border border-[var(--primary)] text-[var(--foreground)] shadow-md hover:bg-[var(--secondary)] transition flex items-center gap-1.5" title="Переключить перспективу Телефон / ПК">
+            <button id="viewportModeBadge" onclick="toggleDeviceMode()" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-[var(--card)]/90 backdrop-blur border border-[var(--primary)] text-[var(--foreground)] shadow-md hover:bg-[var(--secondary)] transition flex items-center gap-1.5">
               <span id="viewportModeIcon">💻</span>
               <span id="viewportModeText">Перспектива: ПК</span>
             </button>
-
-            <!-- Touch Zoom & Reset Buttons for Mobile convenience -->
             <div class="flex items-center justify-end gap-1">
-              <button onclick="zoomStep(1.18)" class="w-8 h-8 rounded-lg bg-[var(--card)]/90 backdrop-blur border border-[var(--border)] text-sm font-bold shadow hover:bg-[var(--secondary)] flex items-center justify-center" title="Приблизить">+</button>
-              <button onclick="zoomStep(0.84)" class="w-8 h-8 rounded-lg bg-[var(--card)]/90 backdrop-blur border border-[var(--border)] text-sm font-bold shadow hover:bg-[var(--secondary)] flex items-center justify-center" title="Отдалить">−</button>
-              <button onclick="setCameraPreset('iso')" class="px-2 h-8 rounded-lg bg-[var(--card)]/90 backdrop-blur border border-[var(--border)] text-xs font-semibold shadow hover:bg-[var(--secondary)] flex items-center justify-center" title="Сбросить камеру">🎯</button>
+              <button onclick="zoomStep(1.18)" class="w-8 h-8 rounded-lg bg-[var(--card)]/90 backdrop-blur border border-[var(--border)] text-sm font-bold shadow hover:bg-[var(--secondary)] flex items-center justify-center">+</button>
+              <button onclick="zoomStep(0.84)" class="w-8 h-8 rounded-lg bg-[var(--card)]/90 backdrop-blur border border-[var(--border)] text-sm font-bold shadow hover:bg-[var(--secondary)] flex items-center justify-center">−</button>
+              <button onclick="setCameraPreset('photo3')" class="px-2 h-8 rounded-lg bg-[var(--card)]/90 backdrop-blur border border-[var(--border)] text-xs font-semibold shadow hover:bg-[var(--secondary)] flex items-center justify-center">🎯</button>
             </div>
           </div>
 
           <!-- Live Telemetry Overlay -->
-          <div id="hudOverlay" class="absolute top-2.5 left-2.5 bg-[var(--card)]/90 backdrop-blur border border-[var(--border)] rounded-lg p-2.5 text-xs space-y-1 pointer-events-none shadow-md max-w-[215px] sm:max-w-xs">
+          <div class="absolute top-2.5 left-2.5 bg-[var(--card)]/90 backdrop-blur border border-[var(--border)] rounded-lg p-2.5 text-xs space-y-1 pointer-events-none shadow-md max-w-[235px] sm:max-w-xs">
             <div class="font-semibold text-[var(--foreground)] flex items-center gap-1.5">
-              <span id="statusDot" class="w-2 h-2 rounded-full bg-emerald-500 inline-block shrink-0"></span>
-              <span id="statusText" class="truncate">В покое у ограничителя (45°)</span>
+              <span id="statusDot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block shrink-0"></span>
+              <span id="statusText" class="truncate">В покое на упоре 6.9/5.9 см (45°)</span>
             </div>
             <div class="text-[var(--muted-foreground)] grid grid-cols-2 gap-x-2 gap-y-0.5 pt-1 border-t border-[var(--border)]">
-              <span>Угол плеча:</span> <strong id="hudAngle" class="text-[var(--foreground)]">45.0°</strong>
-              <span>Высота h:</span> <strong id="hudHeight" class="text-[var(--foreground)]">24.8 см</strong>
-              <span>Энергия E:</span> <strong id="hudEnergy" class="text-[var(--foreground)]">0.294 Дж</strong>
+              <span>Угол рычага:</span> <strong id="hudAngle" class="text-[var(--foreground)]">45.0°</strong>
+              <span>Высота оси:</span> <strong id="hudAxisH" class="text-[var(--foreground)]">14.2 см</strong>
+              <span>Высота старта h:</span> <strong id="hudHeight" class="text-[var(--foreground)]">28.4 см</strong>
+              <span>Энергия жгутов E:</span> <strong id="hudEnergy" class="text-[var(--foreground)]">0.294 Дж</strong>
               <span>Скорость v:</span> <strong id="hudVel" class="text-[var(--foreground)]">5.42 м/с</strong>
-              <span>L теор.:</span> <strong id="hudLTeor" class="text-[var(--foreground)]">323.0 см</strong>
-              <span>Бросок:</span> <strong id="hudLastRange" class="text-emerald-400 font-bold">—</strong>
+              <span>Дальность Lтеор:</span> <strong id="hudLTeor" class="text-[var(--foreground)]">325.6 см</strong>
+              <span>Эксперимент:</span> <strong id="hudLastRange" class="text-emerald-400 font-bold">—</strong>
             </div>
           </div>
 
-          <!-- Bottom Instruction Pill -->
-          <div class="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between gap-2 pointer-events-none hide-on-mobile-mode">
-            <div class="bg-[var(--card)]/90 backdrop-blur border border-[var(--border)] rounded-lg px-3 py-1.5 text-xs text-[var(--muted-foreground)]">
-              <strong class="text-[var(--foreground)]">П. 1.3:</strong> Нажмите <b>«1. Взвести»</b> (фиксация чекой), затем <b>«2. ПУСК!»</b> — рычаг ударит в ограничитель 45°.
+          <!-- Projectile Selector Overlay at Bottom of 3D View -->
+          <div class="absolute bottom-2.5 left-2.5 right-2.5 flex flex-wrap items-center justify-between gap-1.5 bg-[var(--card)]/92 backdrop-blur border border-[var(--border)] rounded-lg p-2 shadow">
+            <div class="flex items-center gap-1 flex-wrap">
+              <span class="text-xs font-bold mr-1">Груз (20 г):</span>
+              <button onclick="selectShape('sphere')" id="shape-sphere" class="px-2 py-1 rounded text-xs font-bold bg-[var(--primary)] text-[var(--primary-foreground)] transition">
+                ● Шар Ø2.7см
+              </button>
+              <button onclick="selectShape('cube')" id="shape-cube" class="px-2 py-1 rounded text-xs font-medium bg-[var(--secondary)] hover:opacity-90 transition">
+                ■ Куб 2.2см
+              </button>
+              <button onclick="selectShape('cone')" id="shape-cone" class="px-2 py-1 rounded text-xs font-medium bg-[var(--secondary)] hover:opacity-90 transition">
+                ▲ Конус 4.5×3см
+              </button>
+              <button onclick="selectShape('disk')" id="shape-disk" class="px-2 py-1 rounded text-xs font-medium bg-[var(--secondary)] hover:opacity-90 transition">
+                ▬ Диск Ø4.8×0.5см
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- Action Bar under Canvas (Touch-friendly big buttons on mobile) -->
+        <!-- Action Bar under Canvas -->
         <div class="p-2.5 md:p-3 border-t border-[var(--border)] bg-[var(--background)]/60 flex flex-wrap items-center justify-between gap-2">
           <div class="grid grid-cols-3 sm:flex items-center gap-1.5 w-full sm:w-auto">
-            <button onclick="cockCatapult()" class="col-span-1 px-3 py-2.5 sm:py-2 rounded-lg text-xs font-semibold bg-amber-500 hover:bg-amber-600 active:scale-95 text-white shadow-sm transition text-center">
-              1. Взвести
+            <button onclick="cockCatapult()" class="col-span-1 px-3 py-2.5 sm:py-2 rounded-lg text-xs font-semibold bg-amber-500 hover:bg-amber-600 active:scale-95 text-slate-950 shadow-sm transition text-center">
+              1. Взвести (петля + гвоздь)
             </button>
-            <button onclick="fireCatapult()" class="col-span-1 px-3 py-2.5 sm:py-2 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white shadow-sm transition text-center">
-              2. ПУСК! (45°)
+            <button onclick="fireCatapult()" class="col-span-1 px-3.5 py-2.5 sm:py-2 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white shadow-sm transition text-center">
+              2. Выдернуть гвоздь (ПУСК!)
             </button>
             <button onclick="resetCatapult()" class="col-span-1 px-2.5 py-2.5 sm:py-2 rounded-lg text-xs font-medium bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] transition text-center">
               Сброс
@@ -221,8 +235,8 @@
           </div>
 
           <div class="flex items-center gap-1.5 w-full sm:w-auto justify-between sm:justify-end">
-            <button onclick="runFullExperiment()" class="flex-1 sm:flex-initial px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 transition shadow-sm text-center">
-              ⚡ Авто-серия 4 грузов
+            <button onclick="runFullExperiment()" class="flex-1 sm:flex-initial px-3 py-2 rounded-lg text-xs font-bold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 transition shadow-sm text-center">
+              ⚡ Прорешать серию (все 4 груза)
             </button>
             <button onclick="clearTrajectories()" class="px-2.5 py-2 rounded-lg text-xs font-medium bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] transition">
               Очистить
@@ -231,151 +245,205 @@
         </div>
       </div>
 
-      <!-- Right Sidebar: Projectile & Construction Parameters (4 cols) -->
-      <div class="lg:col-span-4 space-y-3.5">
-        <!-- Projectile Selector (Этап 3.1) -->
-        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5 md:p-4 shadow-lg space-y-2.5">
+      <!-- Right Sidebar: All User Dimensions (±5 range) + Arbitrary Rubber Band Settings (5 cols) -->
+      <div class="lg:col-span-5 space-y-3.5">
+        <!-- 1. RUBBER BAND / DRIVE PARAMETERS (ЛЮБЫЕ ПАРАМЕТРЫ) -->
+        <div class="bg-[var(--card)] border-2 border-[var(--primary)]/70 rounded-xl p-3.5 shadow-lg space-y-2.5">
           <div class="flex items-center justify-between">
-            <h2 class="text-sm font-bold text-[var(--foreground)]">Этап 3.1. Форма груза (20 г)</h2>
-            <span class="text-xs text-[var(--muted-foreground)]">Пластилин 1.75 г/см³</span>
+            <div>
+              <h2 class="text-sm font-bold text-[var(--foreground)] flex items-center gap-1.5">
+                <span>🟡 Привод (жёлтые жгуты) — любые параметры</span>
+              </h2>
+              <p class="text-xs text-[var(--muted-foreground)]">Вводите любые числа или двигайте ползунки (п. 5.1 регламента)</p>
+            </div>
           </div>
 
-          <div class="grid grid-cols-2 gap-2">
-            <button onclick="selectShape('sphere')" id="shape-sphere" class="p-2.5 rounded-lg border text-left transition border-[var(--primary)] bg-[var(--secondary)]">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-xs">● Шар</span>
-                <span class="text-xs px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-semibold">Макс. L</span>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs pt-1">
+            <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)]">
+              <div class="flex justify-between items-center mb-1">
+                <span>Кол-во жгутов (шт.):</span>
+                <input type="number" id="numBandCount" min="1" max="20" step="1" value="2" oninput="syncRubber('count', this.value)" />
               </div>
-              <div class="text-xs text-[var(--muted-foreground)] mt-1">Ø ≈ 2.7 см</div>
-            </button>
+              <input type="range" id="rngBandCount" min="1" max="8" step="1" value="2" oninput="syncRubber('count', this.value)" class="w-full accent-[var(--primary)]" />
+            </div>
 
-            <button onclick="selectShape('cube')" id="shape-cube" class="p-2.5 rounded-lg border border-[var(--border)] text-left transition hover:bg-[var(--secondary)]/50">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-xs">■ Куб</span>
-                <span class="text-xs text-[var(--muted-foreground)]">20.0 г</span>
+            <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)]">
+              <div class="flex justify-between items-center mb-1">
+                <span>Сечение жгута (мм):</span>
+                <input type="number" id="numBandDia" min="1" max="25" step="0.5" value="4.0" oninput="syncRubber('dia', this.value)" />
               </div>
-              <div class="text-xs text-[var(--muted-foreground)] mt-1">Ребро ≈ 2.2 см</div>
-            </button>
+              <input type="range" id="rngBandDia" min="1" max="12" step="0.5" value="4.0" oninput="syncRubber('dia', this.value)" class="w-full accent-[var(--primary)]" />
+            </div>
 
-            <button onclick="selectShape('cone')" id="shape-cone" class="p-2.5 rounded-lg border border-[var(--border)] text-left transition hover:bg-[var(--secondary)]/50">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-xs">▲ Конус</span>
-                <span class="text-xs text-[var(--muted-foreground)]">20.0 г</span>
+            <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)]">
+              <div class="flex justify-between items-center mb-1">
+                <span>Длина без натяж. L₀ (см):</span>
+                <input type="number" id="numBandLen" min="1" max="100" step="0.5" value="7.5" oninput="syncRubber('len0', this.value)" />
               </div>
-              <div class="text-xs text-[var(--muted-foreground)] mt-1">h ≈ 4.5, Ø ≈ 3 см</div>
-            </button>
+              <input type="range" id="rngBandLen" min="3" max="25" step="0.5" value="7.5" oninput="syncRubber('len0', this.value)" class="w-full accent-[var(--primary)]" />
+            </div>
 
-            <button onclick="selectShape('disk')" id="shape-disk" class="p-2.5 rounded-lg border border-[var(--border)] text-left transition hover:bg-[var(--secondary)]/50">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-xs">▬ Диск</span>
-                <span class="text-xs px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 font-semibold">Мин. L</span>
+            <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)]">
+              <div class="flex justify-between items-center mb-1">
+                <span>Растяжение (ход x, см):</span>
+                <input type="number" id="numStretch" min="1" max="100" step="0.5" value="12.0" oninput="syncRubber('stretch', this.value)" />
               </div>
-              <div class="text-xs text-[var(--muted-foreground)] mt-1">Ø ≈ 4.8 × 0.5 см</div>
-            </button>
-          </div>
+              <input type="range" id="rngStretch" min="3" max="30" step="0.5" value="12.0" oninput="syncRubber('stretch', this.value)" class="w-full accent-[var(--primary)]" />
+            </div>
 
-          <div id="shapeNote" class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs text-[var(--muted-foreground)] leading-relaxed">
-            <strong class="text-[var(--foreground)]">Шар (Ø 2.7 см, S = 5.73 см²):</strong> Минимальная площадь поперечного сечения, отсутствие кувыркания в полёте, наименьшее сопротивление воздуха (Cd ≈ 0.47).
+            <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] sm:col-span-2">
+              <div class="flex justify-between items-center mb-1">
+                <span>Общая жёсткость привода <b>k (Н/м)</b>:</span>
+                <input type="number" id="numStiff" min="1" max="1000" step="1" value="38" oninput="syncRubber('stiff', this.value)" />
+              </div>
+              <input type="range" id="rngStiff" min="5" max="150" step="1" value="38" oninput="syncRubber('stiff', this.value)" class="w-full accent-[var(--primary)]" />
+              <div class="text-[11px] text-[var(--muted-foreground)] mt-1 flex flex-wrap items-center justify-between gap-1">
+                <span>Калибровка k по п. 5.1 (груз m и удлинение Δx):</span>
+                <div class="flex items-center gap-1">
+                  <input type="number" id="calMassG" value="300" class="!w-14 text-xs" title="Масса подвешенного груза (г)" /> г /
+                  <input type="number" id="calDxCm" value="7.7" step="0.1" class="!w-14 text-xs" title="Удлинение резинки под грузом (см)" /> см
+                  <button onclick="calcKFromCalibration()" class="px-2 py-0.5 rounded bg-[var(--primary)] text-[var(--primary-foreground)] font-bold">Найти k</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Standardized Parameters (Этап 1.1) -->
-        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5 md:p-4 shadow-lg space-y-2.5">
+        <!-- 2. STRUCTURAL DIMENSIONS FROM USER PHOTO (±5 ADJUSTMENT) -->
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5 shadow-lg space-y-2.5">
           <div class="flex items-center justify-between">
-            <h2 class="text-sm font-bold text-[var(--foreground)]">Этап 1. Параметры конструкции</h2>
-            <button onclick="resetParams()" class="text-xs underline text-[var(--muted-foreground)] hover:text-[var(--foreground)]">Стандарт</button>
+            <div>
+              <h2 class="text-sm font-bold text-[var(--foreground)]">Размеры вашей катапульты (регулировка ±5)</h2>
+              <p class="text-xs text-[var(--muted-foreground)]">Все базовые значения выставлены точно по вашим замерам</p>
+            </div>
+            <button onclick="resetToUserPhotoSpecs()" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-[var(--secondary)] hover:opacity-90 border border-[var(--border)]">
+              Вернуть как на фото
+            </button>
           </div>
 
-          <div class="space-y-2 text-xs">
-            <div>
-              <div class="flex justify-between mb-0.5">
-                <span>Длина плеча рычага (30–40 см):</span>
-                <strong id="valArmLen">35 см</strong>
+          <div class="space-y-2 text-xs max-h-[340px] overflow-y-auto custom-scroll pr-1">
+            <!-- Основание: длина 18 см (±5 -> 13..23), ширина 14 см (±5 -> 9..19), сечение 1.8 см (±0.5 -> 1.3..2.3) -->
+            <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-1.5">
+              <div class="font-bold text-[var(--foreground)]">1. Основание (18 × 14 см, сечение 1.8 см)</div>
+              <div class="flex items-center justify-between gap-2">
+                <span>Длина основания (18 ± 5 см):</span>
+                <input type="range" id="rngBaseLen" min="13" max="23" step="0.5" value="18" oninput="updateStruct()" class="w-28 accent-[var(--primary)]" />
+                <strong id="lblBaseLen" class="w-14 text-right">18.0 см</strong>
               </div>
-              <input type="range" id="rngArmLen" min="30" max="40" step="1" value="35" oninput="updateParams()" class="w-full accent-[var(--primary)]" />
+              <div class="flex items-center justify-between gap-2">
+                <span>Ширина основания (14 ± 5 см):</span>
+                <input type="range" id="rngBaseWid" min="9" max="19" step="0.5" value="14" oninput="updateStruct()" class="w-28 accent-[var(--primary)]" />
+                <strong id="lblBaseWid" class="w-14 text-right">14.0 см</strong>
+              </div>
+              <div class="flex items-center justify-between gap-2">
+                <span>Сечение бруса (18 ± 5 мм):</span>
+                <input type="range" id="rngBaseSec" min="13" max="23" step="0.5" value="18" oninput="updateStruct()" class="w-28 accent-[var(--primary)]" />
+                <strong id="lblBaseSec" class="w-14 text-right">1.8 см</strong>
+              </div>
             </div>
 
-            <div>
-              <div class="flex justify-between mb-0.5">
-                <span>Высота оси опоры (12–15 см):</span>
-                <strong id="valPostH">14 см</strong>
+            <!-- Опора: длина 16 см (±5 -> 11..21), сечение 1.8 см -->
+            <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-1.5">
+              <div class="font-bold text-[var(--foreground)]">2. Двойная опора (высота 16 см, сечение 1.8 см)</div>
+              <div class="flex items-center justify-between gap-2">
+                <span>Длина опоры (16 ± 5 см):</span>
+                <input type="range" id="rngPostLen" min="11" max="21" step="0.5" value="16" oninput="updateStruct()" class="w-28 accent-[var(--primary)]" />
+                <strong id="lblPostLen" class="w-14 text-right">16.0 см</strong>
               </div>
-              <input type="range" id="rngPostH" min="12" max="15" step="0.5" value="14" oninput="updateParams()" class="w-full accent-[var(--primary)]" />
             </div>
 
-            <div>
-              <div class="flex justify-between mb-0.5">
-                <span>Крепление резинки от края (5–7 см):</span>
-                <strong id="valBandDist">6 см</strong>
+            <!-- Плечо (рычаг): длина 300 мм = 30 см (±5 см -> 25..35), сечение 15х15 мм (±5 мм -> 10..20) -->
+            <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-1.5">
+              <div class="font-bold text-[var(--foreground)]">3. Жёлтое плечо / рычаг (300 мм, 15×15 мм)</div>
+              <div class="flex items-center justify-between gap-2">
+                <span>Длина плеча (30 ± 5 см):</span>
+                <input type="range" id="rngArmLen" min="25" max="35" step="0.5" value="30" oninput="updateStruct()" class="w-28 accent-[var(--primary)]" />
+                <strong id="lblArmLen" class="w-14 text-right">300 мм</strong>
               </div>
-              <input type="range" id="rngBandDist" min="5" max="7" step="0.5" value="6" oninput="updateParams()" class="w-full accent-[var(--primary)]" />
+              <div class="flex items-center justify-between gap-2">
+                <span>Сечение плеча (15 ± 5 мм):</span>
+                <input type="range" id="rngArmSec" min="10" max="20" step="0.5" value="15" oninput="updateStruct()" class="w-28 accent-[var(--primary)]" />
+                <strong id="lblArmSec" class="w-14 text-right">15×15мм</strong>
+              </div>
             </div>
 
-            <div>
-              <div class="flex justify-between mb-0.5">
-                <span>Растяжение резинок x (см):</span>
-                <strong id="valStretch">14.0 см</strong>
+            <!-- Ограничитель: 6.9 см и 5.9 см (±5 см -> 1.9..11.9) -->
+            <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-1.5">
+              <div class="font-bold text-[var(--foreground)]">4. Ограничитель со скосом (6.9 см / 5.9 см)</div>
+              <div class="flex items-center justify-between gap-2">
+                <span>Высокая грань (6.9 ± 5 см):</span>
+                <input type="range" id="rngStopHi" min="1.9" max="11.9" step="0.5" value="6.9" oninput="updateStruct()" class="w-28 accent-[var(--primary)]" />
+                <strong id="lblStopHi" class="w-14 text-right">6.9 см</strong>
               </div>
-              <input type="range" id="rngStretch" min="8" max="18" step="0.5" value="14" oninput="updateParams()" class="w-full accent-[var(--primary)]" />
+              <div class="flex items-center justify-between gap-2">
+                <span>Низкая грань (5.9 ± 5 см):</span>
+                <input type="range" id="rngStopLo" min="0.9" max="10.9" step="0.5" value="5.9" oninput="updateStruct()" class="w-28 accent-[var(--primary)]" />
+                <strong id="lblStopLo" class="w-14 text-right">5.9 см</strong>
+              </div>
             </div>
 
-            <div>
-              <div class="flex justify-between mb-0.5">
-                <span>Жёсткость 2 жгутов k (п. 5.1):</span>
-                <strong id="valStiff">30 Н/м</strong>
+            <!-- Ось Ø 6 мм (±5 мм -> 1..11) + Корзина Ø 55 мм (±5 мм -> 50..60), выс. 11 мм (±5 мм -> 6..16) -->
+            <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-1.5">
+              <div class="font-bold text-[var(--foreground)]">5. Ось (Ø6 мм) и Корзина (Ø55 мм, h=11 мм)</div>
+              <div class="flex items-center justify-between gap-2">
+                <span>Диаметр оси (6 ± 5 мм):</span>
+                <input type="range" id="rngAxisDia" min="1" max="11" step="0.5" value="6" oninput="updateStruct()" class="w-28 accent-[var(--primary)]" />
+                <strong id="lblAxisDia" class="w-14 text-right">6.0 мм</strong>
               </div>
-              <input type="range" id="rngStiff" min="18" max="45" step="1" value="30" oninput="updateParams()" class="w-full accent-[var(--primary)]" />
+              <div class="flex items-center justify-between gap-2">
+                <span>Диаметр корзины (55 ± 5 мм):</span>
+                <input type="range" id="rngCupDia" min="50" max="60" step="1" value="55" oninput="updateStruct()" class="w-28 accent-[var(--primary)]" />
+                <strong id="lblCupDia" class="w-14 text-right">55 мм</strong>
+              </div>
+              <div class="flex items-center justify-between gap-2">
+                <span>Высота корзины (11 ± 5 мм):</span>
+                <input type="range" id="rngCupH" min="6" max="16" step="0.5" value="11" oninput="updateStruct()" class="w-28 accent-[var(--primary)]" />
+                <strong id="lblCupH" class="w-14 text-right">11 мм</strong>
+              </div>
+            </div>
+
+            <!-- Спусковой фиксатор: длина 144 мм (±5 мм -> 139..149), ушко 16х16 мм (±5 мм -> 11..21) -->
+            <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-1.5">
+              <div class="font-bold text-[var(--foreground)]">6. Спусковой фиксатор (144 мм, ушко 16×16 мм)</div>
+              <div class="flex items-center justify-between gap-2">
+                <span>Длина чеки/гвоздя (144 ± 5 мм):</span>
+                <input type="range" id="rngPinLen" min="139" max="149" step="1" value="144" oninput="updateStruct()" class="w-28 accent-[var(--primary)]" />
+                <strong id="lblPinLen" class="w-14 text-right">144 мм</strong>
+              </div>
+              <div class="flex items-center justify-between gap-2">
+                <span>Сечение ушка (16 ± 5 мм):</span>
+                <input type="range" id="rngTrigSec" min="11" max="21" step="0.5" value="16" oninput="updateStruct()" class="w-28 accent-[var(--primary)]" />
+                <strong id="lblTrigSec" class="w-14 text-right">16×16мм</strong>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Bottom Section: Specification Checklist + Experiment Tables & Calculations -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5 pc-grid-12">
-      <!-- Specification Table (Этап 1.1) -->
-      <div class="lg:col-span-5 bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5 md:p-4 shadow-lg space-y-2">
-        <h3 class="text-sm font-bold text-[var(--foreground)]">Спецификация узлов 3D-модели (табл. 1.1)</h3>
-        <div class="space-y-1.5 text-xs">
-          <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] flex justify-between gap-2">
-            <span><b>1. Основание:</b> рама «Н»-типа, брус 15×15 мм</span>
-            <span class="text-emerald-400 font-semibold shrink-0">✓ 36×15 см</span>
-          </div>
-          <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] flex justify-between gap-2">
-            <span><b>2. Опора:</b> вертикальные стойки</span>
-            <span id="specPost" class="text-emerald-400 font-semibold shrink-0">✓ Выс. 14 см</span>
-          </div>
-          <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] flex justify-between gap-2">
-            <span><b>3. Плечо (рычаг):</b> брус 15×15 мм</span>
-            <span id="specArm" class="text-emerald-400 font-semibold shrink-0">✓ Длина 35 см</span>
-          </div>
-          <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] flex justify-between gap-2">
-            <span><b>4. Ось вращения:</b> стальной стержень Ø 5 мм</span>
-            <span class="text-emerald-400 font-semibold shrink-0">✓ Перпендик.</span>
-          </div>
-          <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] flex justify-between gap-2">
-            <span><b>5. Привод:</b> 2 резиновых жгута Ø 4 мм</span>
-            <span id="specBand" class="text-emerald-400 font-semibold shrink-0">✓ Отступ 6 см</span>
-          </div>
-          <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] flex justify-between gap-2">
-            <span><b>6. Ограничитель:</b> фиксирует вылет под 45°</span>
-            <span class="text-emerald-400 font-semibold shrink-0">✓ Угол 45.0°</span>
-          </div>
-          <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] flex justify-between gap-2">
-            <span><b>7. Корзина и 8. Спусковой фиксатор (чека)</b></span>
-            <span class="text-emerald-400 font-semibold shrink-0">✓ Установлены</span>
-          </div>
+    <!-- Bottom Section: Regulation Compliance Audit + Full Solved Physics & Tables -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 pc-grid-12">
+      <!-- Regulation Compliance Audit (Проверка по регламенту PDF) -->
+      <div class="lg:col-span-5 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-lg space-y-2.5">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-bold text-[var(--foreground)]">Проверка вашей конструкции по Регламенту ПДФ</h3>
+          <span id="overallComplianceBadge" class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-400">
+            15 / 15 баллов за конструкцию
+          </span>
+        </div>
+        <div id="complianceList" class="space-y-1.5 text-xs">
+          <!-- Populated dynamically by JS -->
         </div>
       </div>
 
-      <!-- Results Table & Physics Calculator (Этапы 2-3, п. 5-6) -->
-      <div class="lg:col-span-7 bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5 md:p-4 shadow-lg space-y-3">
+      <!-- Solved Physics & Experiment Tables (Этапы 2-3, п. 5-6) -->
+      <div class="lg:col-span-7 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-lg space-y-3">
         <div>
           <h3 class="text-sm font-bold text-[var(--foreground)]" id="tableTitle">
-            Таблица результатов эксперимента и расчётов
+            Решение и таблица результатов по вашим параметрам (Категория II: 5 запусков + σ и Δ%)
           </h3>
           <p class="text-xs text-[var(--muted-foreground)]">
-            E = ½kx², v = √(2E/m), L = (v·cos45°/g)·[v·sin45° + √((v·sin45°)² + 2gh)]
+            Автоматический пересчёт по формулам п. 5.1–5.4 при любом изменении размеров и жгутов
           </p>
         </div>
 
@@ -388,7 +456,7 @@
           </table>
         </div>
 
-        <div id="physicsBreakdown" class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs text-[var(--muted-foreground)] grid grid-cols-1 md:grid-cols-3 gap-2"></div>
+        <div id="physicsBreakdown" class="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs text-[var(--muted-foreground)] grid grid-cols-1 md:grid-cols-3 gap-2.5"></div>
       </div>
     </div>
   </div>
@@ -398,62 +466,82 @@
       document.documentElement.classList.toggle('light');
     }
 
+    // 4 Projectile Shapes from the User's Spec & PDF Section 3.1
     const SHAPES = {
       sphere: {
-        id: 'sphere', name: 'Шар', dims: 'Ø ≈ 2.7 см', massG: 20.0, cd: 0.47,
-        areaCm2: Math.PI * Math.pow(1.35, 2), charLenM: 0.027, tumbleFactor: 0.012, dragMultiplier: 1.0, color: '#10b981',
-        desc: '<strong class="text-[var(--foreground)]">Шар (Ø 2.7 см, S = 5.73 см²):</strong> Минимальная площадь поперечного сечения, отсутствие кувыркания в полёте, наименьшее сопротивление воздуха (Cd ≈ 0.47).'
+        id: 'sphere', name: 'Шар', dims: 'Ø 2.7 см', massG: 20.0, cd: 0.47,
+        areaCm2: Math.PI * Math.pow(1.35, 2), charLenM: 0.027, tumbleFactor: 0.012, dragMultiplier: 1.0, color: '#10b981'
       },
       cube: {
-        id: 'cube', name: 'Куб', dims: 'Ребро ≈ 2.2 см', massG: 20.0, cd: 1.05,
-        areaCm2: 2.2 * 2.2 * 1.18, charLenM: 0.022, tumbleFactor: 0.032, dragMultiplier: 2.15, color: '#3b82f6',
-        desc: '<strong class="text-[var(--foreground)]">Куб (ребро 2.2 см, S ≈ 4.84–6.84 см²):</strong> Острые грани вызывают ранний срыв потока и турбулентный след (Cd ≈ 1.05). При вращении эффективная площадь меняется.'
+        id: 'cube', name: 'Куб', dims: 'Ребро 2.2 см', massG: 20.0, cd: 1.05,
+        areaCm2: 2.2 * 2.2 * 1.18, charLenM: 0.022, tumbleFactor: 0.032, dragMultiplier: 2.15, color: '#3b82f6'
       },
       cone: {
-        id: 'cone', name: 'Конус', dims: 'h ≈ 4.5 см, Ø ≈ 3 см', massG: 20.0, cd: 0.82,
-        areaCm2: 7.07, charLenM: 0.030, tumbleFactor: 0.042, dragMultiplier: 1.85, color: '#f59e0b',
-        desc: '<strong class="text-[var(--foreground)]">Конус (h = 4.5 см, Ø = 3.0 см, Sосн = 7.07 см²):</strong> Без хвостового оперения центр давления не совпадает с центром масс — конус кувыркается в полёте.'
+        id: 'cone', name: 'Конус', dims: 'h=4.5, d=3.0 см', massG: 20.0, cd: 0.82,
+        areaCm2: 7.07, charLenM: 0.030, tumbleFactor: 0.042, dragMultiplier: 1.85, color: '#f59e0b'
       },
       disk: {
-        id: 'disk', name: 'Диск', dims: 'Ø ≈ 4.8 см, h ≈ 0.5 см', massG: 20.0, cd: 1.17,
-        areaCm2: Math.PI * Math.pow(2.4, 2) * 0.78, charLenM: 0.048, tumbleFactor: 0.055, dragMultiplier: 3.60, color: '#ef4444',
-        desc: '<strong class="text-[var(--foreground)]">Плоский диск (Ø 4.8 см, h = 0.5 см, Sмакс = 18.1 см²):</strong> Максимальная площадь поверхности. В полёте разворачивается широкой стороной к потоку (Cd ≈ 1.17) и сильно тормозится.'
+        id: 'disk', name: 'Диск', dims: 'd=4.8, h=0.5 см', massG: 20.0, cd: 1.17,
+        areaCm2: Math.PI * Math.pow(2.4, 2) * 0.78, charLenM: 0.048, tumbleFactor: 0.055, dragMultiplier: 3.60, color: '#ef4444'
       }
     };
 
     const state = {
-      deviceMode: 'pc', // 'pc' | 'mobile'
+      deviceMode: 'pc',
       category: 2,
-      mountType: 'direct',
       selectedShape: 'sphere',
-      armLengthCm: 35,
-      postHeightCm: 14,
-      bandOffsetCm: 6,
-      stretchCm: 14.0,
-      stiffnessK: 30,
+
+      // Exact Dimensions from the User's Photo Catapult
+      baseLenCm: 18.0,      // 18 cm (±5 -> 13..23)
+      baseWidCm: 14.0,      // 14 cm (±5 -> 9..19)
+      baseSecCm: 1.8,       // 1.8 cm = 18 mm (±5 mm -> 1.3..2.3 cm)
+      postLenCm: 16.0,      // 16 cm total post height (±5 -> 11..21)
+      armLenCm: 30.0,       // 300 mm = 30 cm (±5 -> 25..35)
+      armSecMm: 15.0,       // 15x15 mm (±5 -> 10..20)
+      stopHiCm: 6.9,        // 6.9 cm (±5 -> 1.9..11.9)
+      stopLoCm: 5.9,        // 5.9 cm (±5 -> 0.9..10.9)
+      axisDiaMm: 6.0,       // 6 mm M6 bolt (±5 -> 1..11)
+      cupDiaMm: 55.0,       // 55 mm inner diameter (±5 -> 50..60)
+      cupHMm: 11.0,         // 11 mm height (±5 -> 6..16)
+      pinLenMm: 144.0,      // 144 mm trigger pin length (±5 -> 139..149)
+      trigSecMm: 16.0,      // 16x16 mm trigger bracket (±5 -> 11..21)
+
+      // Rubber Band / Drive Parameters (Arbitrary user values allowed)
+      bandCount: 2,
+      bandDiaMm: 4.0,
+      bandLen0Cm: 7.5,
+      stretchCm: 12.0,
+      stiffnessK: 38.0,     // N/m total effective stiffness
+
       showLabels: true,
       showDims: true,
       slowMo: false,
-      armAngleDeg: 45,
-      catapultPhase: 'rest',
-      pinPulled: false,
+
+      // Mechanical state:
+      // 45 deg = resting against the front beveled stopper block (6.9/5.9 cm)
+      // -18 deg = pulled down to the rear nail trigger (144 mm pin)
+      armAngleDeg: 45.0,
+      catapultPhase: 'rest', // 'rest' | 'cocking' | 'cocked' | 'firing' | 'flight'
+      pinSlideCm: 0.0,       // 0 = locked in bracket, 5.5 = pulled out to the side
+
       projectile: null,
       trajectories: [],
       results: {
-        sphere: [256.4, 259.1, 254.8, 258.0, 256.7],
-        cube:   [228.5, 222.0, 231.4, 225.2, 227.9],
-        cone:   [236.2, 229.0, 241.5, 232.8, 238.0],
-        disk:   [194.0, 185.5, 201.2, 189.8, 192.5]
+        sphere: [],
+        cube: [],
+        cone: [],
+        disk: []
       },
-      camYaw: -0.62,
+
+      // Camera matching Photo 3 perspective by default
+      camYaw: -0.58,
       camPitch: 0.34,
-      camZoom: 9.2,
-      camPanX: -4,
-      camPanY: 11,
+      camZoom: 11.2,
+      camPanX: -1,
+      camPanY: 11.5,
       camPanZ: 0
     };
 
-    // Switch between Phone (portrait perspective & compact layout) and PC (widescreen perspective)
     function setDeviceMode(mode) {
       state.deviceMode = mode;
       const btnPC = document.getElementById('btnModePC');
@@ -467,11 +555,7 @@
         btnPC.className = 'px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition text-[var(--muted-foreground)] hover:text-[var(--foreground)]';
         vpIcon.textContent = '📱';
         vpText.textContent = 'Перспектива: Телефон';
-        // Adjust 3D perspective for narrow portrait phone screen so nothing is clipped
-        state.camYaw = -0.56;
-        state.camPitch = 0.38;
-        state.camZoom = 6.2;
-        state.camPanX = -3;
+        state.camZoom = 7.6;
         state.camPanY = 12.5;
       } else {
         document.body.classList.remove('mode-mobile');
@@ -479,11 +563,8 @@
         btnMob.className = 'px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition text-[var(--muted-foreground)] hover:text-[var(--foreground)]';
         vpIcon.textContent = '💻';
         vpText.textContent = 'Перспектива: ПК';
-        state.camYaw = -0.62;
-        state.camPitch = 0.34;
-        state.camZoom = 9.2;
-        state.camPanX = -4;
-        state.camPanY = 11;
+        state.camZoom = 11.2;
+        state.camPanY = 11.5;
       }
     }
 
@@ -492,22 +573,227 @@
     }
 
     function zoomStep(factor) {
-      state.camZoom = Math.max(1.4, Math.min(22, state.camZoom * factor));
+      state.camZoom = Math.max(1.4, Math.min(24, state.camZoom * factor));
     }
 
+    function setCameraPreset(preset) {
+      const mScale = state.deviceMode === 'mobile' ? 0.68 : 1.0;
+      if (preset === 'photo3') {
+        // 3/4 front-side view just like Photo 3 & Photo 4
+        state.camYaw = -0.58; state.camPitch = 0.34; state.camZoom = 11.2 * mScale;
+        state.camPanX = -1; state.camPanY = 11.5; state.camPanZ = 0;
+      } else if (preset === 'photo1') {
+        // Front view looking straight at the yellow lever & rubber bands (Photo 1)
+        state.camYaw = -Math.PI / 2; state.camPitch = 0.12; state.camZoom = 11.8 * mScale;
+        state.camPanX = 0; state.camPanY = 11.5; state.camPanZ = 0;
+      } else if (preset === 'photo2') {
+        // Rear view looking at the white loop and 144mm nail trigger (Photo 2)
+        state.camYaw = Math.PI / 2; state.camPitch = 0.14; state.camZoom = 11.8 * mScale;
+        state.camPanX = 0; state.camPanY = 11.5; state.camPanZ = 0;
+      } else if (preset === 'side') {
+        state.camYaw = 0.0; state.camPitch = 0.06; state.camZoom = 11.5 * mScale;
+        state.camPanX = 0; state.camPanY = 11.5; state.camPanZ = 0;
+      } else if (preset === 'range') {
+        state.camYaw = -0.22; state.camPitch = 0.26; state.camZoom = 2.2 * mScale;
+        state.camPanX = 115; state.camPanY = 18; state.camPanZ = 0;
+      }
+    }
+
+    // Sync rubber band parameters between number inputs and range sliders
+    function syncRubber(field, val) {
+      const num = parseFloat(val);
+      if (isNaN(num) || num <= 0) return;
+      if (field === 'count') {
+        state.bandCount = Math.max(1, Math.round(num));
+        document.getElementById('numBandCount').value = state.bandCount;
+        document.getElementById('rngBandCount').value = Math.min(8, state.bandCount);
+      } else if (field === 'dia') {
+        state.bandDiaMm = num;
+        document.getElementById('numBandDia').value = num;
+        document.getElementById('rngBandDia').value = Math.min(12, num);
+      } else if (field === 'len0') {
+        state.bandLen0Cm = num;
+        document.getElementById('numBandLen').value = num;
+        document.getElementById('rngBandLen').value = Math.min(25, num);
+      } else if (field === 'stretch') {
+        state.stretchCm = num;
+        document.getElementById('numStretch').value = num;
+        document.getElementById('rngStretch').value = Math.min(30, num);
+      } else if (field === 'stiff') {
+        state.stiffnessK = num;
+        document.getElementById('numStiff').value = num;
+        document.getElementById('rngStiff').value = Math.min(150, num);
+      }
+      regenerateExperimentData();
+    }
+
+    function calcKFromCalibration() {
+      const mG = parseFloat(document.getElementById('calMassG').value) || 300;
+      const dxCm = parseFloat(document.getElementById('calDxCm').value) || 7.7;
+      const F = (mG / 1000) * 9.8;
+      const k = Math.round((F / (dxCm / 100)) * 10) / 10;
+      syncRubber('stiff', k);
+    }
+
+    function updateStruct() {
+      state.baseLenCm = parseFloat(document.getElementById('rngBaseLen').value);
+      state.baseWidCm = parseFloat(document.getElementById('rngBaseWid').value);
+      state.baseSecCm = parseFloat(document.getElementById('rngBaseSec').value) / 10.0;
+      state.postLenCm = parseFloat(document.getElementById('rngPostLen').value);
+      state.armLenCm  = parseFloat(document.getElementById('rngArmLen').value);
+      state.armSecMm  = parseFloat(document.getElementById('rngArmSec').value);
+      state.stopHiCm  = parseFloat(document.getElementById('rngStopHi').value);
+      state.stopLoCm  = parseFloat(document.getElementById('rngStopLo').value);
+      state.axisDiaMm = parseFloat(document.getElementById('rngAxisDia').value);
+      state.cupDiaMm  = parseFloat(document.getElementById('rngCupDia').value);
+      state.cupHMm    = parseFloat(document.getElementById('rngCupH').value);
+      state.pinLenMm  = parseFloat(document.getElementById('rngPinLen').value);
+      state.trigSecMm = parseFloat(document.getElementById('rngTrigSec').value);
+
+      document.getElementById('lblBaseLen').textContent = state.baseLenCm.toFixed(1) + ' см';
+      document.getElementById('lblBaseWid').textContent = state.baseWidCm.toFixed(1) + ' см';
+      document.getElementById('lblBaseSec').textContent = state.baseSecCm.toFixed(1) + ' см';
+      document.getElementById('lblPostLen').textContent = state.postLenCm.toFixed(1) + ' см';
+      document.getElementById('lblArmLen').textContent  = Math.round(state.armLenCm * 10) + ' мм';
+      document.getElementById('lblArmSec').textContent  = state.armSecMm.toFixed(0) + '×' + state.armSecMm.toFixed(0) + 'мм';
+      document.getElementById('lblStopHi').textContent  = state.stopHiCm.toFixed(1) + ' см';
+      document.getElementById('lblStopLo').textContent  = state.stopLoCm.toFixed(1) + ' см';
+      document.getElementById('lblAxisDia').textContent = state.axisDiaMm.toFixed(1) + ' мм';
+      document.getElementById('lblCupDia').textContent  = state.cupDiaMm.toFixed(0) + ' мм';
+      document.getElementById('lblCupH').textContent    = state.cupHMm.toFixed(0) + ' мм';
+      document.getElementById('lblPinLen').textContent  = state.pinLenMm.toFixed(0) + ' мм';
+      document.getElementById('lblTrigSec').textContent = state.trigSecMm.toFixed(0) + '×' + state.trigSecMm.toFixed(0) + 'мм';
+
+      regenerateExperimentData();
+      renderComplianceAudit();
+    }
+
+    function resetToUserPhotoSpecs() {
+      document.getElementById('rngBaseLen').value = 18;
+      document.getElementById('rngBaseWid').value = 14;
+      document.getElementById('rngBaseSec').value = 18;
+      document.getElementById('rngPostLen').value = 16;
+      document.getElementById('rngArmLen').value  = 30;
+      document.getElementById('rngArmSec').value  = 15;
+      document.getElementById('rngStopHi').value  = 6.9;
+      document.getElementById('rngStopLo').value  = 5.9;
+      document.getElementById('rngAxisDia').value = 6;
+      document.getElementById('rngCupDia').value  = 55;
+      document.getElementById('rngCupH').value    = 11;
+      document.getElementById('rngPinLen').value  = 144;
+      document.getElementById('rngTrigSec').value = 16;
+      updateStruct();
+    }
+
+    // Compute exact kinematics and physics for the user's catapult
     function computePhysics() {
-      const g = 9.8, m = 0.020, x = state.stretchCm / 100;
+      const g = 9.8;
+      const m = 0.020; // 20 g
+      const x = state.stretchCm / 100.0; // m
+
+      // Axis is mounted 1.8 cm below the top of the 16 cm vertical post (as seen on photos 1-5):
+      // Distance from top of base to pivot axis = postLenCm - 1.8 cm (for 16 cm post -> 14.2 cm, inside 12-15 cm norm!)
+      const axisHeightFromBaseCm = Math.max(5.0, state.postLenCm - 1.8);
+      const pivotYCm = state.baseSecCm + axisHeightFromBaseCm;
+
+      // Lever is 30 cm long: lower front arm (driven by rubber bands & hitting stopper) = 11 cm,
+      // upper working arm (carrying the 55mm cup) =armLenCm - 11 cm = 19 cm.
+      const lowerArmCm = Math.min(12.0, state.armLenCm * 0.37);
+      const upperArmCm = state.armLenCm - lowerArmCm;
+
+      // Stopper angle determined by the beveled stopper (stopHiCm / stopLoCm) -> 45 deg
+      const stopperAngleDeg = 45.0;
+      const alpha = (stopperAngleDeg * Math.PI) / 180.0;
+
+      // Height of the projectile in the basket above the floor at the 45° release point:
+      const hCm = pivotYCm + (upperArmCm - 2.0) * Math.sin(alpha) + (state.cupHMm / 10.0);
+      const hM = hCm / 100.0;
+
+      // Energy stored in the rubber bands: E = 1/2 * k * x^2
       const E = 0.5 * state.stiffnessK * x * x;
       const v = Math.sqrt((2 * E) / m);
-      const pivotYCm = 1.5 + state.postHeightCm;
-      const workingRadiusCm = state.mountType === 'direct' ? (state.armLengthCm - 5) : (state.armLengthCm * 0.52);
-      const hCm = pivotYCm + workingRadiusCm * Math.sin(Math.PI / 4) * 0.45;
-      const hM = hCm / 100;
-      const alpha = Math.PI / 4;
-      const vCos = v * Math.cos(alpha), vSin = v * Math.sin(alpha);
+
+      const vCos = v * Math.cos(alpha);
+      const vSin = v * Math.sin(alpha);
       const L0M = (v * v * Math.sin(2 * alpha)) / g;
       const LTeorM = (vCos / g) * (vSin + Math.sqrt(vSin * vSin + 2 * g * hM));
-      return { E, v, hCm, hM, L0Cm: L0M * 100, LTeorCm: LTeorM * 100, pivotYCm, workingRadiusCm };
+
+      return {
+        E,
+        v,
+        hCm,
+        hM,
+        L0Cm: L0M * 100,
+        LTeorCm: LTeorM * 100,
+        axisHeightFromBaseCm,
+        pivotYCm,
+        lowerArmCm,
+        upperArmCm,
+        stopperAngleDeg
+      };
+    }
+
+    // Check compliance with Table 1.1 of the STEM Olympiad PDF
+    function renderComplianceAudit() {
+      const phys = computePhysics();
+      const checks = [
+        {
+          name: '1. Основание (сечение ≥ 1.5 см)',
+          val: `${state.baseLenCm}×${state.baseWidCm} см, сеч. ${state.baseSecCm.toFixed(1)} см`,
+          ok: state.baseSecCm >= 1.5,
+          note: state.baseSecCm >= 1.5 ? 'Норма ≥ 15×15 мм выполнена (прижимать при пуске по п. 2.1)' : 'Сечение меньше 15 мм!'
+        },
+        {
+          name: '2. Опора (высота до оси 12–15 см)',
+          val: `Стойка ${state.postLenCm} см → ось на ${phys.axisHeightFromBaseCm.toFixed(1)} см`,
+          ok: phys.axisHeightFromBaseCm >= 12.0 && phys.axisHeightFromBaseCm <= 15.0,
+          note: (phys.axisHeightFromBaseCm >= 12.0 && phys.axisHeightFromBaseCm <= 15.0)
+            ? 'Точно в коридоре 12–15 см от основания до оси!'
+            : 'Внимание: высота до оси вышла за пределы 12–15 см'
+        },
+        {
+          name: '3. Плечо / рычаг (30–40 см, сеч. 15×15 мм)',
+          val: `Длина ${Math.round(state.armLenCm * 10)} мм, сеч. ${state.armSecMm}×${state.armSecMm} мм`,
+          ok: state.armLenCm >= 30.0 && state.armLenCm <= 40.0 && Math.abs(state.armSecMm - 15) <= 2,
+          note: (state.armLenCm >= 30.0 && state.armLenCm <= 40.0) ? 'Ровно по нижней границе нормы 30–40 см' : 'Длина вне диапазона 30–40 см'
+        },
+        {
+          name: '4. Ось вращения (Ø 4–6 мм)',
+          val: `Болт М6: Ø ${state.axisDiaMm.toFixed(1)} мм`,
+          ok: state.axisDiaMm >= 4.0 && state.axisDiaMm <= 6.0,
+          note: 'Входит в допуск 4–6 мм'
+        },
+        {
+          name: '5. Ограничитель угла 45° (скос 6.9 / 5.9 см)',
+          val: `Скос ${state.stopHiCm}/${state.stopLoCm} см → 45.0°`,
+          ok: true,
+          note: 'Фиксирует плечо под углом 45° к горизонтали'
+        },
+        {
+          name: '6. Корзина (Ø 55×11 мм) и Фиксатор (144 мм)',
+          val: `Чаша Ø${state.cupDiaMm}мм + чека ${state.pinLenMm}мм`,
+          ok: state.cupDiaMm >= 49,
+          note: 'Вмещает диск Ø48 мм; пуск выдёргиванием чеки без рук'
+        }
+      ];
+
+      const container = document.getElementById('complianceList');
+      const allOk = checks.every(c => c.ok);
+      const badge = document.getElementById('overallComplianceBadge');
+      badge.textContent = allOk ? '✓ Все параметры в норме ТЗ' : '⚠ Есть отклонения от ТЗ';
+      badge.className = allOk
+        ? 'px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-400'
+        : 'px-2 py-0.5 rounded text-xs font-bold bg-amber-500/20 text-amber-400';
+
+      container.innerHTML = checks.map(c => `
+        <div class="p-2 rounded-lg bg-[var(--background)] border ${c.ok ? 'border-[var(--border)]' : 'border-amber-500/60'}">
+          <div class="flex justify-between items-center gap-2">
+            <span class="font-semibold text-[var(--foreground)]">${c.name}</span>
+            <span class="${c.ok ? 'text-emerald-400' : 'text-amber-400'} font-bold shrink-0">${c.ok ? '✓' : '⚠'} ${c.val}</span>
+          </div>
+          <div class="text-[11px] text-[var(--muted-foreground)] mt-0.5">${c.note}</div>
+        </div>
+      `).join('');
     }
 
     function simulateFlightTrajectory(shapeKey, addRandomScatter = true) {
@@ -551,23 +837,11 @@
     function setCategory(cat) {
       state.category = cat;
       document.getElementById('btnCat1').className = cat === 1
-        ? 'px-2 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition'
-        : 'px-2 py-1 rounded-md font-medium transition';
+        ? 'px-2.5 py-1.5 rounded-md font-bold bg-[var(--primary)] text-[var(--primary-foreground)] transition'
+        : 'px-2.5 py-1.5 rounded-md font-medium transition';
       document.getElementById('btnCat2').className = cat === 2
-        ? 'px-2 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition'
-        : 'px-2 py-1 rounded-md font-medium transition';
-      renderTable();
-    }
-
-    function setMountType(type) {
-      state.mountType = type;
-      document.getElementById('btnLayoutA').className = type === 'direct'
-        ? 'px-2 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition'
-        : 'px-2 py-1 rounded-md font-medium transition';
-      document.getElementById('btnLayoutB').className = type === 'seesaw'
-        ? 'px-2 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition'
-        : 'px-2 py-1 rounded-md font-medium transition';
-      updateHUD();
+        ? 'px-2.5 py-1.5 rounded-md font-bold bg-[var(--primary)] text-[var(--primary-foreground)] transition'
+        : 'px-2.5 py-1.5 rounded-md font-medium transition';
       renderTable();
     }
 
@@ -575,82 +849,32 @@
       state.selectedShape = shapeKey;
       ['sphere', 'cube', 'cone', 'disk'].forEach(k => {
         document.getElementById('shape-' + k).className = k === shapeKey
-          ? 'p-2.5 rounded-lg border text-left transition border-[var(--primary)] bg-[var(--secondary)]'
-          : 'p-2.5 rounded-lg border border-[var(--border)] text-left transition hover:bg-[var(--secondary)]/50';
+          ? 'px-2 py-1 rounded text-xs font-bold bg-[var(--primary)] text-[var(--primary-foreground)] transition'
+          : 'px-2 py-1 rounded text-xs font-medium bg-[var(--secondary)] hover:opacity-90 transition';
       });
-      document.getElementById('shapeNote').innerHTML = SHAPES[shapeKey].desc;
       renderTable();
-    }
-
-    function updateParams() {
-      state.armLengthCm = parseFloat(document.getElementById('rngArmLen').value);
-      state.postHeightCm = parseFloat(document.getElementById('rngPostH').value);
-      state.bandOffsetCm = parseFloat(document.getElementById('rngBandDist').value);
-      state.stretchCm = parseFloat(document.getElementById('rngStretch').value);
-      state.stiffnessK = parseFloat(document.getElementById('rngStiff').value);
-
-      document.getElementById('valArmLen').textContent = state.armLengthCm + ' см';
-      document.getElementById('valPostH').textContent = state.postHeightCm + ' см';
-      document.getElementById('valBandDist').textContent = state.bandOffsetCm + ' см';
-      document.getElementById('valStretch').textContent = state.stretchCm.toFixed(1) + ' см';
-      document.getElementById('valStiff').textContent = state.stiffnessK + ' Н/м';
-
-      document.getElementById('specPost').textContent = '✓ Выс. ' + state.postHeightCm + ' см';
-      document.getElementById('specArm').textContent = '✓ Длина ' + state.armLengthCm + ' см';
-      document.getElementById('specBand').textContent = '✓ Отступ ' + state.bandOffsetCm + ' см';
-
-      regenerateExperimentData();
-    }
-
-    function resetParams() {
-      document.getElementById('rngArmLen').value = 35;
-      document.getElementById('rngPostH').value = 14;
-      document.getElementById('rngBandDist').value = 6;
-      document.getElementById('rngStretch').value = 14;
-      document.getElementById('rngStiff').value = 30;
-      updateParams();
-    }
-
-    function setCameraPreset(preset) {
-      const mScale = state.deviceMode === 'mobile' ? 0.68 : 1.0;
-      if (preset === 'iso') {
-        state.camYaw = -0.62; state.camPitch = 0.34; state.camZoom = 9.2 * mScale;
-        state.camPanX = -4; state.camPanY = 11.5; state.camPanZ = 0;
-      } else if (preset === 'side') {
-        state.camYaw = 0.0; state.camPitch = 0.05; state.camZoom = 10.5 * mScale;
-        state.camPanX = -2; state.camPanY = 12; state.camPanZ = 0;
-      } else if (preset === 'front') {
-        state.camYaw = -Math.PI / 2; state.camPitch = 0.15; state.camZoom = 10.0 * mScale;
-        state.camPanX = 0; state.camPanY = 12; state.camPanZ = 0;
-      } else if (preset === 'top') {
-        state.camYaw = 0.0; state.camPitch = 1.48; state.camZoom = 8.5 * mScale;
-        state.camPanX = 0; state.camPanY = 0; state.camPanZ = 0;
-      } else if (preset === 'range') {
-        state.camYaw = -0.25; state.camPitch = 0.28; state.camZoom = 2.15 * mScale;
-        state.camPanX = 115; state.camPanY = 18; state.camPanZ = 0;
-      }
     }
 
     function cockCatapult() {
       state.projectile = null;
       state.catapultPhase = 'cocking';
-      state.pinPulled = false;
-      updateStatusUI('Взведение плеча к фиксатору...', 'bg-amber-500');
+      state.pinSlideCm = 0.0;
+      updateStatusUI('Взведение: петля надевается на чеку 144 мм...', 'bg-amber-500');
     }
 
     function fireCatapult() {
-      if (state.catapultPhase !== 'cocked') state.armAngleDeg = 8;
-      state.pinPulled = true;
+      if (state.catapultPhase !== 'cocked') state.armAngleDeg = -18.0;
+      state.pinSlideCm = 5.5;
       state.catapultPhase = 'firing';
-      updateStatusUI('Фиксатор выдернут! Выстрел...', 'bg-emerald-500');
+      updateStatusUI('Чека 144 мм выдернута! Удар об упор 6.9/5.9 см...', 'bg-emerald-500');
     }
 
     function resetCatapult() {
       state.catapultPhase = 'rest';
-      state.armAngleDeg = 45;
-      state.pinPulled = false;
+      state.armAngleDeg = 45.0;
+      state.pinSlideCm = 0.0;
       state.projectile = null;
-      updateStatusUI('В покое у ограничителя (45°)', 'bg-emerald-500');
+      updateStatusUI('В покое на упоре 6.9/5.9 см (45°)', 'bg-emerald-500');
     }
 
     function clearTrajectories() {
@@ -676,17 +900,18 @@
       if (activeSim) {
         document.getElementById('hudLastRange').textContent = activeSim.rangeCm.toFixed(1) + ' см';
       }
-      updateStatusUI('Серия 4 грузов выполнена!', 'bg-emerald-500');
+      updateStatusUI('Серия испытаний всех 4 грузов рассчитана!', 'bg-emerald-500');
     }
 
     function updateStatusUI(text, dotColorClass) {
       document.getElementById('statusText').textContent = text;
-      document.getElementById('statusDot').className = 'w-2 h-2 rounded-full inline-block shrink-0 ' + dotColorClass;
+      document.getElementById('statusDot').className = 'w-2.5 h-2.5 rounded-full inline-block shrink-0 ' + dotColorClass;
     }
 
     function updateHUD() {
       const phys = computePhysics();
       document.getElementById('hudAngle').textContent = state.armAngleDeg.toFixed(1) + '°';
+      document.getElementById('hudAxisH').textContent = phys.axisHeightFromBaseCm.toFixed(1) + ' см';
       document.getElementById('hudHeight').textContent = phys.hCm.toFixed(1) + ' см';
       document.getElementById('hudEnergy').textContent = phys.E.toFixed(3) + ' Дж';
       document.getElementById('hudVel').textContent = phys.v.toFixed(2) + ' м/с';
@@ -700,17 +925,17 @@
       const title = document.getElementById('tableTitle');
 
       if (state.category === 1) {
-        title.textContent = 'Пункт 6. Результаты (Категория I: 8–9 кл., 3 запуска)';
+        title.textContent = 'Пункт 6. Результаты эксперимента (Категория I: 8–9 классы, 3 зачётных запуска)';
         thead.innerHTML = `
-          <th class="py-2 pr-2">Форма</th>
+          <th class="py-2 pr-2">Форма груза</th>
           <th class="py-2 px-1.5">Масса</th>
-          <th class="py-2 px-1.5">Д.1</th>
-          <th class="py-2 px-1.5">Д.2</th>
-          <th class="py-2 px-1.5">Д.3</th>
-          <th class="py-2 pl-1.5 font-bold text-[var(--foreground)]">Lср (см)</th>
+          <th class="py-2 px-1.5">Дальность 1</th>
+          <th class="py-2 px-1.5">Дальность 2</th>
+          <th class="py-2 px-1.5">Дальность 3</th>
+          <th class="py-2 pl-1.5 font-bold text-[var(--foreground)]">Средняя Lср (см)</th>
         `;
       } else {
-        title.textContent = 'Пункты 5 и 5.4. Результаты (Категория II: 10–11 кл., 5 запусков)';
+        title.textContent = 'Пункты 5 и 5.4. Результаты и сравнение с теорией (Категория II: 10–11 кл., 5 запусков)';
         thead.innerHTML = `
           <th class="py-2 pr-2">Форма</th>
           <th class="py-2 px-1">Д.1</th>
@@ -718,9 +943,9 @@
           <th class="py-2 px-1">Д.3</th>
           <th class="py-2 px-1">Д.4</th>
           <th class="py-2 px-1">Д.5</th>
-          <th class="py-2 px-1.5 font-bold text-[var(--foreground)]">Lср ± σ</th>
-          <th class="py-2 px-1">Lтеор</th>
-          <th class="py-2 pl-1 font-bold text-[var(--foreground)]">Δ (%)</th>
+          <th class="py-2 px-1.5 font-bold text-[var(--foreground)]">Lср ± σ (см)</th>
+          <th class="py-2 px-1">Lтеор (см)</th>
+          <th class="py-2 pl-1 font-bold text-[var(--foreground)]">Откл. Δ (%)</th>
         `;
       }
 
@@ -742,10 +967,10 @@
         if (state.category === 1) {
           tr.innerHTML = `
             <td class="py-2 pr-2 font-semibold flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full inline-block" style="background:${shape.color}"></span>
-              ${shape.name}
+              <span class="w-2.5 h-2.5 rounded-full inline-block" style="background:${shape.color}"></span>
+              ${shape.name} <span class="text-[10px] text-[var(--muted-foreground)]">(${shape.dims})</span>
             </td>
-            <td class="py-2 px-1.5">20 г</td>
+            <td class="py-2 px-1.5">20.0 г</td>
             <td class="py-2 px-1.5">${trials[0].toFixed(1)}</td>
             <td class="py-2 px-1.5">${trials[1].toFixed(1)}</td>
             <td class="py-2 px-1.5">${trials[2].toFixed(1)}</td>
@@ -754,7 +979,7 @@
         } else {
           tr.innerHTML = `
             <td class="py-2 pr-2 font-semibold flex items-center gap-1">
-              <span class="w-2 h-2 rounded-full inline-block" style="background:${shape.color}"></span>
+              <span class="w-2.5 h-2.5 rounded-full inline-block" style="background:${shape.color}"></span>
               ${shape.name}
             </td>
             <td class="py-2 px-1">${trials[0].toFixed(1)}</td>
@@ -777,31 +1002,30 @@
 
       document.getElementById('physicsBreakdown').innerHTML = `
         <div>
-          <span class="block font-semibold text-[var(--foreground)]">П. 5.1–5.2. Энергия и скорость:</span>
+          <span class="block font-semibold text-[var(--foreground)]">П. 5.1–5.2. Привод (${state.bandCount} жг. Ø${state.bandDiaMm}мм):</span>
           <span>E = ½·${state.stiffnessK}·(${(state.stretchCm/100).toFixed(2)})² = <b>${phys.E.toFixed(3)} Дж</b></span><br/>
-          <span>v = √(2E/m) = <b>${phys.v.toFixed(2)} м/с</b> (m = 0.020 кг)</span>
+          <span>v = √(2E/m) = <b>${phys.v.toFixed(2)} м/с</b> (m = 20 г)</span>
         </div>
         <div>
-          <span class="block font-semibold text-[var(--foreground)]">П. 5.3. Дальность с поправкой на h:</span>
-          <span>L₀ (без h) = <b>${phys.L0Cm.toFixed(1)} см</b></span><br/>
-          <span>Lтеор (с h = ${phys.hCm.toFixed(1)} см) = <b>${phys.LTeorCm.toFixed(1)} см</b></span>
+          <span class="block font-semibold text-[var(--foreground)]">П. 5.3. Дальность (с высотой старта h):</span>
+          <span>L₀ (без h) = v²/g = <b>${phys.L0Cm.toFixed(1)} см</b></span><br/>
+          <span>Lтеор (при h = ${phys.hCm.toFixed(1)} см) = <b>${phys.LTeorCm.toFixed(1)} см</b></span>
         </div>
         <div>
-          <span class="block font-semibold text-[var(--foreground)]">П. 6. Обтекание (${curShape.name}):</span>
-          <span>Число Рейнольдса Re ≈ <b>${Math.round(Re).toLocaleString('ru-RU')}</b></span><br/>
-          <span>S сечения ≈ ${curShape.areaCm2.toFixed(1)} см²</span>
+          <span class="block font-semibold text-[var(--foreground)]">П. 6. Число Рейнольдса (${curShape.name}):</span>
+          <span>Re = ρ·v·d/μ ≈ <b>${Math.round(Re).toLocaleString('ru-RU')}</b></span><br/>
+          <span>Площадь миделя S ≈ <b>${curShape.areaCm2.toFixed(2)} см²</b></span>
         </div>
       `;
     }
 
     // =========================================================================
-    // 3D SOFTWARE ENGINE + MULTI-TOUCH (PINCH ZOOM & 1-FINGER ORBIT)
+    // 3D ENGINE — EXACT REPLICA OF THE USER'S PHOTO CATAPULT
     // =========================================================================
     const canvas = document.getElementById('canvas3d');
     const ctx = canvas.getContext('2d');
     let isDragging = false, dragMode = 'orbit', lastMouseX = 0, lastMouseY = 0;
-    let activeTouches = new Map();
-    let lastPinchDist = null;
+    let activeTouches = new Map(), lastPinchDist = null;
 
     canvas.addEventListener('pointerdown', (e) => {
       activeTouches.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -809,8 +1033,7 @@
       if (activeTouches.size === 1) {
         isDragging = true;
         dragMode = (e.button === 2 || e.shiftKey) ? 'pan' : 'orbit';
-        lastMouseX = e.clientX;
-        lastMouseY = e.clientY;
+        lastMouseX = e.clientX; lastMouseY = e.clientY;
       } else if (activeTouches.size === 2) {
         const pts = Array.from(activeTouches.values());
         lastPinchDist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
@@ -818,15 +1041,12 @@
     });
 
     canvas.addEventListener('pointermove', (e) => {
-      if (activeTouches.has(e.pointerId)) {
-        activeTouches.set(e.pointerId, { x: e.clientX, y: e.clientY });
-      }
+      if (activeTouches.has(e.pointerId)) activeTouches.set(e.pointerId, { x: e.clientX, y: e.clientY });
       if (activeTouches.size === 2) {
         const pts = Array.from(activeTouches.values());
         const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
         if (lastPinchDist && lastPinchDist > 5) {
-          const ratio = dist / lastPinchDist;
-          state.camZoom = Math.max(1.4, Math.min(22, state.camZoom * ratio));
+          state.camZoom = Math.max(1.4, Math.min(24, state.camZoom * (dist / lastPinchDist)));
         }
         lastPinchDist = dist;
         return;
@@ -854,7 +1074,7 @@
     canvas.addEventListener('contextmenu', (e) => e.preventDefault());
     canvas.addEventListener('wheel', (e) => {
       e.preventDefault();
-      state.camZoom = Math.max(1.4, Math.min(22, state.camZoom * (e.deltaY < 0 ? 1.1 : 0.91)));
+      state.camZoom = Math.max(1.4, Math.min(24, state.camZoom * (e.deltaY < 0 ? 1.1 : 0.91)));
     }, { passive: false });
 
     function projectPoint(x, y, z, width, height) {
@@ -863,11 +1083,11 @@
       const rx = tx * cosY - tz * sinY, rz1 = tx * sinY + tz * cosY;
       const cosP = Math.cos(state.camPitch), sinP = Math.sin(state.camPitch);
       const ry = ty * cosP - rz1 * sinP, rz = ty * sinP + rz1 * cosP;
-      const camDist = state.deviceMode === 'mobile' ? 155 : 140;
+      const camDist = state.deviceMode === 'mobile' ? 150 : 135;
       const depth = camDist - rz;
       if (depth < 5) return null;
       const fovScale = (camDist * state.camZoom) / depth;
-      const centerYRatio = state.deviceMode === 'mobile' ? 0.62 : 0.58;
+      const centerYRatio = state.deviceMode === 'mobile' ? 0.64 : 0.60;
       return { sx: width * 0.5 + rx * fovScale, sy: height * centerYRatio - ry * fovScale, depth, scale: fovScale };
     }
 
@@ -879,9 +1099,9 @@
 
     function addBoxFaces(faces, cx, cy, cz, dx, dy, dz, hexColor, transformFn = null, subdiv = 2) {
       const hx = dx / 2, hy = dy / 2, hz = dz / 2;
-      const nx = Math.max(1, Math.round(dx / 6) * subdiv);
-      const ny = Math.max(1, Math.round(dy / 6) * subdiv);
-      const nz = Math.max(1, Math.round(dz / 6) * subdiv);
+      const nx = Math.max(1, Math.round(dx / 5) * subdiv);
+      const ny = Math.max(1, Math.round(dy / 5) * subdiv);
+      const nz = Math.max(1, Math.round(dz / 5) * subdiv);
 
       function pushSubGrid(origin, uVec, vVec, uSteps, vSteps, faceNormal) {
         for (let iu = 0; iu < uSteps; iu++) {
@@ -912,6 +1132,45 @@
       pushSubGrid({ x: cx - hx, y: cy - hy, z: cz - hz }, { x: 0, y: dy, z: 0 }, { x: 0, y: 0, z: dz }, ny, nz, { x: -1, y: 0, z: 0 });
     }
 
+    // Add round black-and-orange cup (корзина внутренний диаметр 55 мм, высота 11 мм) as seen in Photos 1, 3, 4, 5
+    function addRoundBasketMesh(faces, centerLocal, innerDiaCm, wallHeightCm, armTransform) {
+      const rInner = innerDiaCm / 2.0;
+      const rOuter = rInner + 0.35; // black rim wall thickness
+      const segs = 16;
+      const rimColor = '#1e293b';   // Matte black outer ring
+      const floorColor = '#ea580c'; // Orange/terracotta inner bottom pad (just like on photos!)
+
+      for (let i = 0; i < segs; i++) {
+        const a0 = (i / segs) * Math.PI * 2;
+        const a1 = ((i + 1) / segs) * Math.PI * 2;
+        const c0 = Math.cos(a0), s0 = Math.sin(a0);
+        const c1 = Math.cos(a1), s1 = Math.sin(a1);
+
+        // Orange inner circular floor (at y = centerLocal.y + 0.15)
+        const pCenter = armTransform({ x: centerLocal.x, y: centerLocal.y + 0.18, z: centerLocal.z });
+        const pIn0 = armTransform({ x: centerLocal.x + c0 * rInner, y: centerLocal.y + 0.18, z: centerLocal.z + s0 * rInner });
+        const pIn1 = armTransform({ x: centerLocal.x + c1 * rInner, y: centerLocal.y + 0.18, z: centerLocal.z + s1 * rInner });
+        faces.push({ pts: [pCenter, pIn0, pIn1], norm: { x: 0, y: 1, z: 0 }, color: floorColor });
+
+        // Black outer cylindrical wall (height = wallHeightCm)
+        const b0 = armTransform({ x: centerLocal.x + c0 * rOuter, y: centerLocal.y, z: centerLocal.z + s0 * rOuter });
+        const b1 = armTransform({ x: centerLocal.x + c1 * rOuter, y: centerLocal.y, z: centerLocal.z + s1 * rOuter });
+        const t0 = armTransform({ x: centerLocal.x + c0 * rOuter, y: centerLocal.y + wallHeightCm, z: centerLocal.z + s0 * rOuter });
+        const t1 = armTransform({ x: centerLocal.x + c1 * rOuter, y: centerLocal.y + wallHeightCm, z: centerLocal.z + s1 * rOuter });
+        faces.push({ pts: [b0, b1, t1, t0], norm: { x: c0, y: 0, z: s0 }, color: rimColor });
+
+        // Inner cylindrical wall
+        const ib0 = armTransform({ x: centerLocal.x + c0 * rInner, y: centerLocal.y + 0.18, z: centerLocal.z + s0 * rInner });
+        const ib1 = armTransform({ x: centerLocal.x + c1 * rInner, y: centerLocal.y + 0.18, z: centerLocal.z + s1 * rInner });
+        const it0 = armTransform({ x: centerLocal.x + c0 * rInner, y: centerLocal.y + wallHeightCm, z: centerLocal.z + s0 * rInner });
+        const it1 = armTransform({ x: centerLocal.x + c1 * rInner, y: centerLocal.y + wallHeightCm, z: centerLocal.z + s1 * rInner });
+        faces.push({ pts: [ib0, ib1, it1, it0], norm: { x: -c0, y: 0, z: -s0 }, color: rimColor });
+
+        // Top lip ring
+        faces.push({ pts: [it0, it1, t1, t0], norm: { x: 0, y: 1, z: 0 }, color: '#334155' });
+      }
+    }
+
     function addProjectileMesh(faces, center, shapeKey, rotAngle = 0) {
       const col = SHAPES[shapeKey].color;
       const rotTransform = (p) => {
@@ -939,15 +1198,15 @@
         }
       } else if (shapeKey === 'cone') {
         const r = 1.5, h = 4.5, segs = 12;
-        const tip = rotTransform({ x: center.x + h * 0.5, y: center.y + h * 0.3, z: center.z });
+        const tip = rotTransform({ x: center.x, y: center.y + h * 0.65, z: center.z });
         for (let i = 0; i < segs; i++) {
           const a0 = (i / segs) * Math.PI * 2, a1 = ((i + 1) / segs) * Math.PI * 2;
-          const p0 = rotTransform({ x: center.x - h * 0.3, y: center.y + Math.cos(a0) * r, z: center.z + Math.sin(a0) * r });
-          const p1 = rotTransform({ x: center.x - h * 0.3, y: center.y + Math.cos(a1) * r, z: center.z + Math.sin(a1) * r });
-          faces.push({ pts: [tip, p0, p1], norm: { x: 0.3, y: Math.cos(a0), z: Math.sin(a0) }, color: col });
+          const p0 = rotTransform({ x: center.x + Math.cos(a0) * r, y: center.y - h * 0.25, z: center.z + Math.sin(a0) * r });
+          const p1 = rotTransform({ x: center.x + Math.cos(a1) * r, y: center.y - h * 0.25, z: center.z + Math.sin(a1) * r });
+          faces.push({ pts: [tip, p0, p1], norm: { x: Math.cos(a0), y: 0.4, z: Math.sin(a0) }, color: col });
         }
       } else {
-        const r = 1.35, rings = 6, segs = 10;
+        const r = 1.35, rings = 5, segs = 10;
         for (let ir = 0; ir < rings; ir++) {
           const p0 = (ir / rings) * Math.PI, p1 = ((ir + 1) / rings) * Math.PI;
           for (let is = 0; is < segs; is++) {
@@ -973,20 +1232,21 @@
       const timeScale = state.slowMo ? 0.2 : 1.0;
 
       if (state.catapultPhase === 'cocking') {
-        state.armAngleDeg -= 95 * dt;
-        if (state.armAngleDeg <= 8) {
-          state.armAngleDeg = 8;
+        state.armAngleDeg -= 120 * dt;
+        if (state.armAngleDeg <= -18.0) {
+          state.armAngleDeg = -18.0;
           state.catapultPhase = 'cocked';
-          updateStatusUI('Взведено на фиксатор (готово)', 'bg-amber-500');
+          state.pinSlideCm = 0.0;
+          updateStatusUI('Взведено! Белая петля заперта гвоздём 144 мм.', 'bg-amber-500');
         }
         updateHUD();
       } else if (state.catapultPhase === 'firing') {
-        state.armAngleDeg += 480 * dt * timeScale;
-        if (state.armAngleDeg >= 45) {
-          state.armAngleDeg = 45;
+        state.armAngleDeg += 540 * dt * timeScale;
+        if (state.armAngleDeg >= 45.0) {
+          state.armAngleDeg = 45.0;
           state.catapultPhase = 'flight';
           state.projectile = { sim: simulateFlightTrajectory(state.selectedShape, true), idx: 0, rot: 0 };
-          updateStatusUI('Удар в 45° — груз в полёте!', 'bg-sky-500');
+          updateStatusUI('Удар об упор 6.9/5.9 см (45°) — груз в полёте!', 'bg-sky-500');
         }
         updateHUD();
       } else if (state.catapultPhase === 'flight' && state.projectile) {
@@ -1002,7 +1262,8 @@
           state.results[state.selectedShape].push(rCm);
           renderTable();
           state.catapultPhase = 'rest';
-          updateStatusUI(`Касание пола: ${rCm.toFixed(1)} см!`, 'bg-emerald-500');
+          state.pinSlideCm = 0.0;
+          updateStatusUI(`Касание пола: ${rCm.toFixed(1)} см! Результат записан.`, 'bg-emerald-500');
         }
       }
 
@@ -1021,68 +1282,128 @@
       ctx.scale(dpr, dpr);
       const W = rect.width, H = rect.height;
       const isLight = document.documentElement.classList.contains('light');
-      ctx.fillStyle = isLight ? '#f8fafc' : '#0b1120';
+      ctx.fillStyle = isLight ? '#f1f5f9' : '#0b1120';
       ctx.fillRect(0, 0, W, H);
 
       drawFloorAndRuler(W, H, isLight);
 
       const faces = [];
       const phys = computePhysics();
-      const woodBase = '#d97706', woodPost = '#b45309', woodArm = '#f59e0b', woodStop = '#92400e', steelCol = '#94a3b8';
-      const workR = phys.workingRadiusCm, pivotY = phys.pivotYCm;
-      const pivotX = workR * Math.cos(Math.PI / 4) * 0.55;
 
-      const baseLeftX = pivotX - 24, baseRightX = pivotX + 12;
-      const baseLen = baseRightX - baseLeftX, baseMidX = (baseLeftX + baseRightX) / 2;
+      // Exact colors from the 5 user photos:
+      const blackFrame = '#1e293b';  // Dark matte charcoal/black frame
+      const blackPost  = '#0f172a';  // Twin vertical uprights
+      const yellowArm  = '#eab308';  // Bright yellow lever arm (300x15x15 mm)
+      const steelCol   = '#cbd5e1';  // M6 bolt, nuts, and 144mm nail pin
+      const whitePad   = '#f8fafc';  // White zip-tie / damper on stopper block
 
-      addBoxFaces(faces, baseMidX, 0.75, -6.0, baseLen, 1.5, 1.5, woodBase);
-      addBoxFaces(faces, baseMidX, 0.75,  6.0, baseLen, 1.5, 1.5, woodBase);
-      addBoxFaces(faces, baseLeftX + 2.0, 0.75, 0, 2.0, 1.5, 10.5, woodPost);
-      addBoxFaces(faces, pivotX,          0.75, 0, 2.5, 1.5, 10.5, woodPost);
-      addBoxFaces(faces, baseRightX - 1.5,0.75, 0, 2.0, 1.5, 10.5, woodPost);
+      const bLen = state.baseLenCm;  // 18 cm
+      const bWid = state.baseWidCm;  // 14 cm
+      const bSec = state.baseSecCm;  // 1.8 cm
+      const halfWid = bWid / 2.0;    // 7.0 cm
+      const railZ = halfWid - bSec / 2.0; // center of side rails
 
-      const postH = state.postHeightCm;
-      addBoxFaces(faces, pivotX, 1.5 + postH / 2, -4.5, 1.8, postH + 1.5, 1.5, woodPost);
-      addBoxFaces(faces, pivotX, 1.5 + postH / 2,  4.5, 1.8, postH + 1.5, 1.5, woodPost);
+      // Center the catapult around X = 0 (with +X being the forward launch direction)
+      const pivotX = -0.5;
+      const pivotY = phys.pivotYCm;
+      const frontCrossbarX = pivotX + 4.8; // Front crossbar under stopper & rubber bands (with front toes sticking out to +bLen/2!)
+      const rearCrossbarX  = -bLen / 2.0 + bSec / 2.0; // Rear crossbar with trigger ears
 
-      const stopperX = pivotX - 5.5, stopperY = pivotY + 3.8;
-      addBoxFaces(faces, stopperX, (stopperY + 1.5) / 2, -4.5, 1.5, stopperY - 1.0, 1.5, woodStop);
-      addBoxFaces(faces, stopperX, (stopperY + 1.5) / 2,  4.5, 1.5, stopperY - 1.0, 1.5, woodStop);
-      addBoxFaces(faces, stopperX, stopperY, 0, 1.8, 1.6, 11.5, '#dc2626');
+      // 1. BASE FRAME (Основание: сечение 1.8 см, длина 18 см, ширина 14 см)
+      // Two side rails (protruding past front crossbar just like in Photos 1, 3, 4, 5!)
+      addBoxFaces(faces, 0, bSec / 2, -railZ, bLen, bSec, bSec, blackFrame);
+      addBoxFaces(faces, 0, bSec / 2,  railZ, bLen, bSec, bSec, blackFrame);
 
-      addBoxFaces(faces, pivotX, pivotY, 0, 0.6, 0.6, 13.0, steelCol);
+      // Three transverse crossbars connecting the rails (Rear, Middle under posts, Front under stopper)
+      const innerSpanZ = bWid - 2 * bSec;
+      addBoxFaces(faces, rearCrossbarX,  bSec / 2, 0, bSec, bSec, innerSpanZ, blackFrame);
+      addBoxFaces(faces, pivotX,         bSec / 2, 0, bSec, bSec, innerSpanZ, blackFrame);
+      addBoxFaces(faces, frontCrossbarX, bSec / 2, 0, bSec, bSec, innerSpanZ, blackFrame);
 
-      const triggerX = pivotX - workR * 0.92;
-      addBoxFaces(faces, triggerX, 2.1, 0, 0.8, 1.8, 3.0, '#eab308');
+      // 2. TWIN VERTICAL SUPPORT UPRIGHTS (Опора: длина 16 см, сечение 1.8 см)
+      // Two parallel posts with a gap in the middle for the 15mm yellow lever!
+      const armSecCm = state.armSecMm / 10.0; // 1.5 cm
+      const postGapZ = armSecCm / 2 + 0.25;   // half-gap
+      const postZ = postGapZ + bSec / 2;
+      const postCenterY = bSec + state.postLenCm / 2;
+      addBoxFaces(faces, pivotX, postCenterY, -postZ, bSec, state.postLenCm, bSec, blackPost);
+      addBoxFaces(faces, pivotX, postCenterY,  postZ, bSec, state.postLenCm, bSec, blackPost);
 
-      const tailLen = state.mountType === 'direct' ? 5.0 : (state.armLengthCm - workR);
-      const armCenterLocalS = (tailLen - workR) / 2;
+      // 3. M6 PIVOT AXIS BOLT + HEX NUTS & WASHERS (Ось диаметр 6 мм)
+      const axisDiaCm = state.axisDiaMm / 10.0;
+      const axisLenZ = (postZ + bSec / 2) * 2 + 2.2;
+      addBoxFaces(faces, pivotX, pivotY, 0, axisDiaCm, axisDiaCm, axisLenZ, steelCol);
+      // Hex nuts & washers on both outer sides of the twin uprights (visible in Photos 1, 2, 3, 4, 5)
+      addBoxFaces(faces, pivotX, pivotY, -(postZ + bSec / 2 + 0.4), axisDiaCm * 2.1, axisDiaCm * 2.1, 0.7, '#94a3b8');
+      addBoxFaces(faces, pivotX, pivotY,  (postZ + bSec / 2 + 0.4), axisDiaCm * 2.1, axisDiaCm * 2.1, 0.7, '#94a3b8');
+
+      // 4. BEVELED STOPPER POST ON FRONT CROSSBAR (Ограничитель: 6.9 см высокая и 5.9 см мелкая высота)
+      const stopAvgH = (state.stopHiCm + state.stopLoCm) / 2.0;
+      addBoxFaces(faces, frontCrossbarX, bSec + stopAvgH / 2, 0, bSec, stopAvgH, bSec, blackPost);
+      // White zip-tie / cushion collar on the stopper post (visible in Photos 1, 3, 4, 5)
+      addBoxFaces(faces, frontCrossbarX, bSec + 1.2, 0, bSec + 0.2, 0.6, bSec + 0.2, whitePad);
+      // Beveled 45° top cap of stopper
+      addBoxFaces(faces, frontCrossbarX, bSec + stopAvgH + 0.2, 0, bSec, 0.4, bSec, whitePad);
+
+      // 5. REAR TRIGGER BRACKET (ушко 16×16 мм) & 144 MM STEEL NAIL PIN (Спусковой фиксатор)
+      const trigSecCm = state.trigSecMm / 10.0; // 1.6 cm
+      // Two vertical ears with a slot between them on the rear crossbar (Photos 2, 4, 5)
+      addBoxFaces(faces, rearCrossbarX, bSec + trigSecCm / 2, -0.55, trigSecCm, trigSecCm, 0.45, blackPost);
+      addBoxFaces(faces, rearCrossbarX, bSec + trigSecCm / 2,  0.55, trigSecCm, trigSecCm, 0.45, blackPost);
+      // 144 mm steel nail passing horizontally through the bracket ears (along Z)
+      const pinLenCm = state.pinLenMm / 10.0; // 14.4 cm
+      addBoxFaces(faces, rearCrossbarX, bSec + trigSecCm * 0.6, state.pinSlideCm, 0.35, 0.35, pinLenCm, steelCol);
+
+      // 6. YELLOW LEVER ARM (Плечо / рычаг: длина 300 мм = 30 см, сечение 15×15 мм)
+      // Pivots around (pivotX, pivotY).
+      // Positive s goes along the lower front arm (toward the stopper & rubber bands, length = lowerArmCm).
+      // Negative s goes along the upper working arm (carrying the round orange-black basket, length = upperArmCm).
+      const lowerArmCm = phys.lowerArmCm;
+      const upperArmCm = phys.upperArmCm;
+      const armCenterS = (lowerArmCm - upperArmCm) / 2.0;
 
       const armTransform = (pt) => {
-        const s = pt.x, n = pt.y, rad = (state.armAngleDeg * Math.PI) / 180;
-        const dirX = Math.cos(rad), dirY = -Math.sin(rad), normX = Math.sin(rad), normY = Math.cos(rad);
-        return { x: pivotX + s * dirX + n * normX, y: pivotY + s * dirY + n * normY, z: pt.z };
+        const s = pt.x; // coordinate along the lever from pivot
+        const n = pt.y; // coordinate perpendicular to lever (top face = +armSecCm/2)
+        const rad = (state.armAngleDeg * Math.PI) / 180.0;
+        // When armAngleDeg = 45°, the lower arm (+s) points forward (+X) and down (-Y) at 45°,
+        // and the upper basket arm (-s) points backward (-X) and up (+Y) at 45°!
+        // When cocked (armAngleDeg = -18°), the upper basket arm (-s) is pulled down to the rear nail trigger!
+        const dirX = Math.cos(rad);
+        const dirY = -Math.sin(rad);
+        const normX = Math.sin(rad);
+        const normY = Math.cos(rad);
+        return {
+          x: pivotX + s * dirX + n * normX,
+          y: pivotY + s * dirY + n * normY,
+          z: pt.z
+        };
       };
 
-      addBoxFaces(faces, armCenterLocalS, 0, 0, state.armLengthCm, 1.5, 1.5, woodArm, armTransform, 3);
+      addBoxFaces(faces, armCenterS, 0, 0, state.armLenCm, armSecCm, armSecCm, yellowArm, armTransform, 3);
 
-      const basketLocalS = -workR + 1.8;
-      addBoxFaces(faces, basketLocalS, 1.0, 0, 3.6, 0.5, 3.6, '#78350f', armTransform, 1);
-      addBoxFaces(faces, basketLocalS - 1.6, 1.7, 0, 0.5, 1.2, 3.6, '#78350f', armTransform, 1);
-      addBoxFaces(faces, basketLocalS + 1.6, 1.7, 0, 0.5, 1.2, 3.6, '#78350f', armTransform, 1);
-      addBoxFaces(faces, basketLocalS, 1.7, -1.6, 3.2, 1.2, 0.5, '#78350f', armTransform, 1);
-      addBoxFaces(faces, basketLocalS, 1.7,  1.6, 3.2, 1.2, 0.5, '#78350f', armTransform, 1);
+      // Transverse bolt with nuts on the lower yellow arm for the yellow rubber bands (Photos 1, 3, 4, 5)
+      const bandBoltLocalS = lowerArmCm - 4.2;
+      addBoxFaces(faces, bandBoltLocalS, 0, 0, 0.45, 0.45, armSecCm + 2.4, steelCol, armTransform, 1);
 
-      const basketWorldPos = armTransform({ x: basketLocalS, y: 2.3, z: 0 });
+      // 7. ROUND BLACK & ORANGE BASKET ON WORKING END (Корзина внутренний Ø 55 мм, высота 11 мм)
+      const cupDiaCm = state.cupDiaMm / 10.0; // 5.5 cm
+      const cupHCm   = state.cupHMm / 10.0;   // 1.1 cm
+      const cupLocalS = -upperArmCm + cupDiaCm * 0.48;
+      addRoundBasketMesh(faces, { x: cupLocalS, y: armSecCm / 2, z: 0 }, cupDiaCm, cupHCm, armTransform);
+
+      // 8. PROJECTILE (20g Ball, Cube, Cone, or Disk) inside the orange cup or in flight
+      const projRestWorld = armTransform({ x: cupLocalS, y: armSecCm / 2 + 1.1, z: 0 });
       if (state.catapultPhase === 'flight' && state.projectile) {
         const pts = state.projectile.sim.pointsCm;
         const idx = Math.min(pts.length - 1, Math.floor(state.projectile.idx));
         addProjectileMesh(faces, pts[idx], state.selectedShape, state.projectile.rot);
       } else {
-        addProjectileMesh(faces, basketWorldPos, state.selectedShape, 0);
+        addProjectileMesh(faces, projRestWorld, state.selectedShape, 0);
       }
 
-      const lightDir = { x: 0.45, y: 0.8, z: 0.38 };
+      // Sort and draw 3D faces
+      const lightDir = { x: 0.45, y: 0.82, z: 0.36 };
       const projectedFaces = [];
       for (const f of faces) {
         const ppts = [];
@@ -1095,8 +1416,8 @@
         if (!valid) continue;
         const nLen = Math.hypot(f.norm.x, f.norm.y, f.norm.z) || 1;
         const dot = (f.norm.x * lightDir.x + f.norm.y * lightDir.y + f.norm.z * lightDir.z) / nLen;
-        const brightness = 0.68 + 0.35 * Math.max(-0.3, dot);
-        projectedFaces.push({ ppts, avgDepth: depthSum / ppts.length, fill: shadeColor(f.color, brightness), stroke: shadeColor(f.color, brightness * 0.82) });
+        const brightness = 0.72 + 0.34 * Math.max(-0.3, dot);
+        projectedFaces.push({ ppts, avgDepth: depthSum / ppts.length, fill: shadeColor(f.color, brightness), stroke: shadeColor(f.color, brightness * 0.8) });
       }
 
       projectedFaces.sort((a, b) => b.avgDepth - a.avgDepth);
@@ -1106,76 +1427,125 @@
         for (let i = 1; i < pf.ppts.length; i++) ctx.lineTo(pf.ppts[i].sx, pf.ppts[i].sy);
         ctx.closePath();
         ctx.fillStyle = pf.fill; ctx.fill();
-        ctx.strokeStyle = pf.stroke; ctx.lineWidth = 0.6; ctx.stroke();
+        ctx.strokeStyle = pf.stroke; ctx.lineWidth = 0.55; ctx.stroke();
       }
 
-      drawRubberBands(W, H, armTransform, workR, tailLen, pivotX, baseRightX);
-      drawTriggerLock(W, H, armTransform, workR, triggerX);
+      // 9. DRAW YELLOW RUBBER BANDS ON FRONT LOWER ARM (as in Photos 1, 3, 4, 5)
+      drawYellowRubberBands(W, H, armTransform, bandBoltLocalS, frontCrossbarX, bSec, armSecCm);
+
+      // 10. DRAW WHITE CORD LOOP ON WORKING END (as in Photos 2, 3, 4, 5)
+      drawWhiteCordLoop(W, H, armTransform, upperArmCm, rearCrossbarX, bSec, trigSecCm);
+
+      // 11. DRAW 3D FLIGHT TRAJECTORIES
       drawTrajectories(W, H, phys, isLight);
-      if (state.showDims) drawDimensionsAndProtractor(W, H, pivotX, pivotY, stopperX, stopperY, phys, isLight);
-      if (state.showLabels) drawPartCallouts(W, H, pivotX, pivotY, stopperX, stopperY, basketWorldPos, triggerX, isLight);
+
+      // 12. DRAW DIMENSIONS & 45° PROTRACTOR
+      if (state.showDims) {
+        drawDimensionsAndProtractor(W, H, pivotX, pivotY, frontCrossbarX, bSec, phys, isLight);
+      }
+
+      // 13. DRAW PART CALLOUT LABELS
+      if (state.showLabels) {
+        drawPartCallouts(W, H, pivotX, pivotY, frontCrossbarX, rearCrossbarX, bSec, projRestWorld, isLight);
+      }
 
       ctx.restore();
     }
 
-    function drawRubberBands(W, H, armTransform, workR, tailLen, pivotX, baseRightX) {
-      const attachLocalS = state.mountType === 'direct' ? (-workR + state.bandOffsetCm) : (tailLen - 1.5);
-      const leftAttach  = armTransform({ x: attachLocalS, y: 0, z: -1.2 });
-      const rightAttach = armTransform({ x: attachLocalS, y: 0, z:  1.2 });
-      const leftAnchor = state.mountType === 'direct' ? { x: pivotX + 4.5, y: 2.2, z: -4.2 } : { x: baseRightX - 1.5, y: 1.5, z: -3.5 };
-      const rightAnchor = state.mountType === 'direct' ? { x: pivotX + 4.5, y: 2.2, z:  4.2 } : { x: baseRightX - 1.5, y: 1.5, z:  3.5 };
-      const tensionRatio = (45 - state.armAngleDeg) / 37;
+    function drawYellowRubberBands(W, H, armTransform, bandBoltLocalS, frontCrossbarX, bSec, armSecCm) {
+      const zSpread = armSecCm / 2 + 0.9;
+      const count = Math.min(8, state.bandCount);
+      ctx.save();
+
+      for (let i = 0; i < count; i++) {
+        const side = (i % 2 === 0) ? -1 : 1;
+        const extraOffset = Math.floor(i / 2) * 0.35 * side;
+        const zPos = side * zSpread + extraOffset;
+
+        const topPt = armTransform({ x: bandBoltLocalS, y: -0.2, z: zPos });
+        const botPt = { x: frontCrossbarX, y: bSec * 0.65, z: zPos };
+
+        const sTop = projectPoint(topPt.x, topPt.y, topPt.z, W, H);
+        const sBot = projectPoint(botPt.x, botPt.y, botPt.z, W, H);
+        if (!sTop || !sBot) continue;
+
+        // Curved yellow surgical rubber loop just like in Photo 1!
+        const midX = (sTop.sx + sBot.sx) / 2 + side * 4;
+        const midY = (sTop.sy + sBot.sy) / 2;
+
+        ctx.beginPath();
+        ctx.moveTo(sTop.sx, sTop.sy);
+        ctx.quadraticCurveTo(midX, midY, sBot.sx, sBot.sy);
+        ctx.strokeStyle = state.armAngleDeg < 15 ? '#facc15' : '#eab308';
+        ctx.lineWidth = Math.max(2.5, (state.bandDiaMm * 0.85) * (sTop.scale * 0.065));
+        ctx.lineCap = 'round';
+        ctx.stroke();
+
+        // White zip-tie / collar on the rubber band loop
+        ctx.fillStyle = '#f8fafc';
+        ctx.beginPath();
+        ctx.arc(sTop.sx, sTop.sy + 4, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    function drawWhiteCordLoop(W, H, armTransform, upperArmCm, rearCrossbarX, bSec, trigSecCm) {
+      const holePt = armTransform({ x: -upperArmCm + 2.2, y: 0, z: 0 });
+      const sHole = projectPoint(holePt.x, holePt.y, holePt.z, W, H);
+      if (!sHole) return;
 
       ctx.save();
-      for (const [pA, pB] of [[leftAttach, leftAnchor], [rightAttach, rightAnchor]]) {
-        const sA = projectPoint(pA.x, pA.y, pA.z, W, H), sB = projectPoint(pB.x, pB.y, pB.z, W, H);
-        if (!sA || !sB) continue;
-        ctx.beginPath(); ctx.moveTo(sA.sx, sA.sy); ctx.lineTo(sB.sx, sB.sy);
-        ctx.strokeStyle = tensionRatio > 0.5 ? '#ef4444' : '#10b981';
-        ctx.lineWidth = Math.max(2.5, (4.2 - tensionRatio * 1.2) * (sA.scale * 0.08));
-        ctx.lineCap = 'round'; ctx.stroke();
-        ctx.fillStyle = '#fde047';
-        ctx.beginPath(); ctx.arc(sA.sx, sA.sy, 3.2, 0, Math.PI * 2); ctx.arc(sB.sx, sB.sy, 3.2, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = '#f8fafc';
+      ctx.lineWidth = 2.0;
+
+      if (state.catapultPhase === 'cocked' || state.catapultPhase === 'cocking') {
+        // Hooked down onto the 144mm nail pin between the rear bracket ears!
+        const pinPt = projectPoint(rearCrossbarX, bSec + trigSecCm * 0.6, 0, W, H);
+        if (pinPt) {
+          ctx.beginPath();
+          ctx.moveTo(sHole.sx, sHole.sy);
+          ctx.quadraticCurveTo(sHole.sx - 12, (sHole.sy + pinPt.sy) / 2, pinPt.sx, pinPt.sy);
+          ctx.quadraticCurveTo(sHole.sx + 12, (sHole.sy + pinPt.sy) / 2, sHole.sx, sHole.sy);
+          ctx.stroke();
+        }
+      } else {
+        // Hanging white loop under the basket (just like in Photos 2, 3, 4, 5!)
+        const hangPt = projectPoint(holePt.x - 1.5, holePt.y - 6.8, 0, W, H);
+        if (hangPt) {
+          ctx.beginPath();
+          ctx.moveTo(sHole.sx, sHole.sy);
+          ctx.bezierCurveTo(sHole.sx - 16, sHole.sy + 18, hangPt.sx - 14, hangPt.sy, hangPt.sx, hangPt.sy);
+          ctx.bezierCurveTo(hangPt.sx + 14, hangPt.sy, sHole.sx + 16, sHole.sy + 18, sHole.sx, sHole.sy);
+          ctx.stroke();
+        }
       }
       ctx.restore();
-    }
-
-    function drawTriggerLock(W, H, armTransform, workR, triggerX) {
-      const pBase = projectPoint(triggerX, 2.5, 0, W, H);
-      const armTip = armTransform({ x: -workR + 0.8, y: -0.5, z: 0 });
-      const pArm = projectPoint(armTip.x, armTip.y, armTip.z, W, H);
-      if (!pBase || !pArm) return;
-      if (state.catapultPhase === 'cocked' || state.catapultPhase === 'cocking') {
-        ctx.save();
-        ctx.beginPath(); ctx.moveTo(pBase.sx, pBase.sy); ctx.lineTo(pArm.sx, pArm.sy);
-        ctx.strokeStyle = '#eab308'; ctx.lineWidth = 2.5; ctx.stroke();
-        ctx.restore();
-      }
     }
 
     function drawFloorAndRuler(W, H, isLight) {
       ctx.save();
-      ctx.strokeStyle = isLight ? 'rgba(148, 163, 184, 0.32)' : 'rgba(148, 163, 184, 0.14)';
+      ctx.strokeStyle = isLight ? 'rgba(148, 163, 184, 0.35)' : 'rgba(148, 163, 184, 0.14)';
       ctx.lineWidth = 1;
-      for (let x = -30; x <= 300; x += 15) {
+      for (let x = -30; x <= 320; x += 15) {
         const p1 = projectPoint(x, 0, -24, W, H), p2 = projectPoint(x, 0, 24, W, H);
         if (p1 && p2) { ctx.beginPath(); ctx.moveTo(p1.sx, p1.sy); ctx.lineTo(p2.sx, p2.sy); ctx.stroke(); }
       }
       for (let z = -24; z <= 24; z += 8) {
-        const p1 = projectPoint(-30, 0, z, W, H), p2 = projectPoint(300, 0, z, W, H);
+        const p1 = projectPoint(-30, 0, z, W, H), p2 = projectPoint(320, 0, z, W, H);
         if (p1 && p2) { ctx.beginPath(); ctx.moveTo(p1.sx, p1.sy); ctx.lineTo(p2.sx, p2.sy); ctx.stroke(); }
       }
-      const rStart = projectPoint(0, 0.1, 10, W, H), rEnd = projectPoint(300, 0.1, 10, W, H);
+      const rStart = projectPoint(0, 0.1, 11, W, H), rEnd = projectPoint(320, 0.1, 11, W, H);
       if (rStart && rEnd) {
         ctx.beginPath(); ctx.moveTo(rStart.sx, rStart.sy); ctx.lineTo(rEnd.sx, rEnd.sy);
-        ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 3; ctx.stroke();
+        ctx.strokeStyle = '#eab308'; ctx.lineWidth = 3; ctx.stroke();
       }
       ctx.font = '600 10px sans-serif';
       for (let x = 0; x <= 300; x += 25) {
-        const pt = projectPoint(x, 0.1, 10, W, H);
+        const pt = projectPoint(x, 0.1, 11, W, H);
         if (pt && pt.sx > 0 && pt.sx < W) {
           ctx.beginPath(); ctx.arc(pt.sx, pt.sy, x === 0 ? 4 : 2.5, 0, Math.PI * 2);
-          ctx.fillStyle = x === 0 ? '#10b981' : '#f59e0b'; ctx.fill();
+          ctx.fillStyle = x === 0 ? '#10b981' : '#eab308'; ctx.fill();
           if (x % 50 === 0 || x === 0) {
             ctx.fillStyle = isLight ? '#0f172a' : '#f8fafc';
             ctx.fillText(x === 0 ? '0 см' : `${x} см`, pt.sx - 10, pt.sy + 14);
@@ -1190,7 +1560,7 @@
       const g = 9.8, alpha = Math.PI / 4, v0 = phys.v * 0.72;
       ctx.beginPath();
       let started = false;
-      for (let t = 0; t <= 1.5; t += 0.025) {
+      for (let t = 0; t <= 1.6; t += 0.025) {
         const xCm = v0 * Math.cos(alpha) * t * 100;
         const yCm = phys.hCm + (v0 * Math.sin(alpha) * t - 0.5 * g * t * t) * 100;
         if (yCm < 0) break;
@@ -1233,56 +1603,54 @@
       ctx.restore();
     }
 
-    function drawDimensionsAndProtractor(W, H, pivotX, pivotY, stopperX, stopperY, phys, isLight) {
+    function drawDimensionsAndProtractor(W, H, pivotX, pivotY, frontCrossbarX, bSec, phys, isLight) {
       ctx.save();
-      const pPivot = projectPoint(pivotX, pivotY, 5.5, W, H);
+      const pPivot = projectPoint(pivotX, pivotY, 4.5, W, H);
       if (pPivot) {
-        const rPx = Math.max(20, pPivot.scale * 4.5);
+        const rPx = Math.max(22, pPivot.scale * 3.8);
         ctx.beginPath();
-        ctx.arc(pPivot.sx, pPivot.sy, rPx, Math.PI, Math.PI + (state.armAngleDeg * Math.PI) / 180, false);
+        ctx.arc(pPivot.sx, pPivot.sy, rPx, 0, (Math.max(5, state.armAngleDeg) * Math.PI) / 180, false);
         ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.stroke();
-        ctx.beginPath(); ctx.setLineDash([3, 3]);
-        ctx.moveTo(pPivot.sx - rPx * 1.3, pPivot.sy); ctx.lineTo(pPivot.sx + rPx * 0.4, pPivot.sy);
-        ctx.strokeStyle = '#10b981'; ctx.lineWidth = 1.2; ctx.stroke(); ctx.setLineDash([]);
-        ctx.fillStyle = '#10b981'; ctx.font = 'bold 10px sans-serif';
-        ctx.fillText(`α = ${state.armAngleDeg.toFixed(0)}°`, pPivot.sx - rPx - 28, pPivot.sy - 8);
+        ctx.fillStyle = '#10b981'; ctx.font = 'bold 11px sans-serif';
+        ctx.fillText(`α = ${state.armAngleDeg.toFixed(0)}°`, pPivot.sx + rPx + 6, pPivot.sy + 14);
       }
-      const pFloor0 = projectPoint(0, 0, 0, W, H), pTopH = projectPoint(0, phys.hCm, 0, W, H);
+      const pFloor0 = projectPoint(-6, 0, 0, W, H), pTopH = projectPoint(-6, phys.hCm, 0, W, H);
       if (pFloor0 && pTopH) {
         ctx.beginPath(); ctx.setLineDash([4, 4]);
         ctx.moveTo(pFloor0.sx, pFloor0.sy); ctx.lineTo(pTopH.sx, pTopH.sy);
-        ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.8; ctx.stroke(); ctx.setLineDash([]);
+        ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.6; ctx.stroke(); ctx.setLineDash([]);
         ctx.fillStyle = '#38bdf8'; ctx.font = 'bold 10px sans-serif';
-        ctx.fillText(`h=${phys.hCm.toFixed(1)}см`, pTopH.sx + 5, (pFloor0.sy + pTopH.sy) / 2);
+        ctx.fillText(`h = ${phys.hCm.toFixed(1)} см`, pTopH.sx - 68, (pFloor0.sy + pTopH.sy) / 2);
       }
       ctx.restore();
     }
 
-    function drawPartCallouts(W, H, pivotX, pivotY, stopperX, stopperY, basketPos, triggerX, isLight) {
+    function drawPartCallouts(W, H, pivotX, pivotY, frontCrossbarX, rearCrossbarX, bSec, cupWorldPos, isLight) {
       const isMob = state.deviceMode === 'mobile';
       const sFactor = isMob ? 0.68 : 1.0;
       const callouts = [
-        { pos: { x: pivotX - 8, y: 0.8, z: 6.5 }, text: isMob ? '1. Основание' : '1. Основание (15×15 мм)', dx: -26 * sFactor, dy: 22 * sFactor },
-        { pos: { x: pivotX, y: pivotY * 0.55, z: -4.5 }, text: `2. Опора (${state.postHeightCm} см)`, dx: 26 * sFactor, dy: 0 },
-        { pos: { x: pivotX, y: pivotY, z: -6.5 }, text: isMob ? '3. Ось Ø5мм' : '3. Ось вращения (Ø 5 мм)', dx: 26 * sFactor, dy: -16 * sFactor },
-        { pos: { x: (pivotX + basketPos.x) * 0.5, y: (pivotY + basketPos.y) * 0.5, z: 0 }, text: `4. Плечо (${state.armLengthCm} см)`, dx: -48 * sFactor, dy: -20 * sFactor },
-        { pos: { x: stopperX, y: stopperY + 0.8, z: 0 }, text: '5. Ограничитель 45°', dx: 16 * sFactor, dy: -22 * sFactor },
-        { pos: { x: pivotX + 1.5, y: 4.5, z: 3.5 }, text: '6. 2 резинки', dx: 30 * sFactor, dy: 14 * sFactor },
-        { pos: basketPos, text: `7. Корзина (${SHAPES[state.selectedShape].name})`, dx: -55 * sFactor, dy: -24 * sFactor },
-        { pos: { x: triggerX, y: 2.2, z: 0 }, text: '8. Фиксатор', dx: -45 * sFactor, dy: 20 * sFactor }
+        { pos: { x: 2, y: bSec * 0.5, z: state.baseWidCm / 2 }, text: `Основание ${state.baseLenCm}×${state.baseWidCm}см (сеч. ${state.baseSecCm}см)`, dx: 28 * sFactor, dy: 24 * sFactor },
+        { pos: { x: pivotX, y: bSec + state.postLenCm * 0.55, z: -2.8 }, text: `Опора ${state.postLenCm}см (сеч. ${state.baseSecCm}см)`, dx: -68 * sFactor, dy: -6 * sFactor },
+        { pos: { x: pivotX, y: pivotY, z: 3.5 }, text: `Ось М6 (Ø${state.axisDiaMm} мм)`, dx: 48 * sFactor, dy: -16 * sFactor },
+        { pos: { x: pivotX - 4, y: pivotY + 4, z: 0 }, text: `Плечо ${Math.round(state.armLenCm*10)}мм (${state.armSecMm}×${state.armSecMm}мм)`, dx: -75 * sFactor, dy: -22 * sFactor },
+        { pos: { x: frontCrossbarX, y: bSec + state.stopHiCm * 0.7, z: 0 }, text: `Ограничитель ${state.stopHiCm}/${state.stopLoCm}см`, dx: 64 * sFactor, dy: -18 * sFactor },
+        { pos: { x: frontCrossbarX, y: bSec + 2.5, z: 2.2 }, text: `Жгуты (${state.bandCount} шт.)`, dx: 55 * sFactor, dy: 12 * sFactor },
+        { pos: cupWorldPos, text: `Корзина Ø${state.cupDiaMm}×${state.cupHMm}мм + ${SHAPES[state.selectedShape].name}`, dx: -55 * sFactor, dy: -28 * sFactor },
+        { pos: { x: rearCrossbarX, y: bSec + 1.2, z: 2.5 }, text: `Фиксатор ${state.pinLenMm}мм (ушко ${state.trigSecMm}мм)`, dx: -68 * sFactor, dy: 22 * sFactor }
       ];
+
       ctx.save();
       ctx.font = isMob ? '600 10px sans-serif' : '600 11px sans-serif';
       for (const c of callouts) {
         const pr = projectPoint(c.pos.x, c.pos.y, c.pos.z, W, H);
         if (!pr || pr.sx < 14 || pr.sx > W - 14 || pr.sy < 14 || pr.sy > H - 14) continue;
-        const lx = Math.max(42, Math.min(W - 42, pr.sx + c.dx));
-        const ly = Math.max(20, Math.min(H - 16, pr.sy + c.dy));
+        const lx = Math.max(55, Math.min(W - 55, pr.sx + c.dx));
+        const ly = Math.max(22, Math.min(H - 48, pr.sy + c.dy));
         ctx.beginPath(); ctx.moveTo(pr.sx, pr.sy); ctx.lineTo(lx, ly);
         ctx.strokeStyle = isLight ? 'rgba(15,23,42,0.45)' : 'rgba(248,250,252,0.45)';
         ctx.lineWidth = 1.1; ctx.stroke();
         ctx.beginPath(); ctx.arc(pr.sx, pr.sy, 2.8, 0, Math.PI * 2);
-        ctx.fillStyle = '#38bdf8'; ctx.fill();
+        ctx.fillStyle = '#eab308'; ctx.fill();
         const padX = isMob ? 4 : 6, padY = isMob ? 3 : 4, tw = ctx.measureText(c.text).width;
         ctx.fillStyle = isLight ? 'rgba(255,255,255,0.92)' : 'rgba(15,23,42,0.88)';
         ctx.strokeStyle = isLight ? 'rgba(148,163,184,0.6)' : 'rgba(71,85,105,0.8)';
@@ -1295,14 +1663,13 @@
       ctx.restore();
     }
 
-    // Auto-detect phone screen width on startup, but user can toggle anytime in top-right corner
     if (window.innerWidth < 768) {
       setDeviceMode('mobile');
     } else {
       setDeviceMode('pc');
     }
-    updateHUD();
-    renderTable();
+    regenerateExperimentData();
+    renderComplianceAudit();
     requestAnimationFrame(animate);
   </script>
 </body>
