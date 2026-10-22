@@ -193,9 +193,9 @@
               <span>Угол рычага:</span> <strong id="hudAngle" class="text-[var(--foreground)]">45.0°</strong>
               <span>Высота оси:</span> <strong id="hudAxisH" class="text-[var(--foreground)]">14.2 см</strong>
               <span>Высота старта h:</span> <strong id="hudHeight" class="text-[var(--foreground)]">28.0 см</strong>
-              <span>Энергия жгутов E:</span> <strong id="hudEnergy" class="text-[var(--foreground)]">0.109 Дж</strong>
-              <span>Скорость v:</span> <strong id="hudVel" class="text-[var(--foreground)]">3.30 м/с</strong>
-              <span>Дальность Lтеор:</span> <strong id="hudLTeor" class="text-[var(--foreground)]">134.5 см</strong>
+              <span>Энергия жгутов E:</span> <strong id="hudEnergy" class="text-[var(--foreground)]">0.125 Дж</strong>
+              <span>Скорость v:</span> <strong id="hudVel" class="text-[var(--foreground)]">3.53 м/с</strong>
+              <span>Дальность Lтеор:</span> <strong id="hudLTeor" class="text-[var(--foreground)]">150.6 см</strong>
               <span>Эксперимент:</span> <strong id="hudLastRange" class="text-emerald-400 font-bold">163.0 см</strong>
             </div>
           </div>
@@ -294,15 +294,16 @@
             <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] sm:col-span-2">
               <div class="flex justify-between items-center mb-1">
                 <span>Жёсткость привода <b>k (Н/м)</b>:</span>
-                <input type="number" id="numStiff" min="1" max="1000" step="0.1" value="45.8" oninput="syncRubber('stiff', this.value)" />
+                <input type="number" id="numStiff" min="1" max="1000" step="0.1" value="52.3" oninput="syncRubber('stiff', this.value)" />
               </div>
-              <input type="range" id="rngStiff" min="5" max="150" step="0.1" value="45.8" oninput="syncRubber('stiff', this.value)" class="w-full accent-[var(--primary)]" />
-              <div class="text-[11px] text-[var(--muted-foreground)] mt-1 flex flex-wrap items-center justify-between gap-1">
-                <span>Калибровка k по п. 5.1 (груз m и удлинение Δx):</span>
-                <div class="flex items-center gap-1">
-                  <input type="number" id="calMassG" value="300" class="!w-14 text-xs" title="Масса подвешенного груза (г)" /> г /
-                  <input type="number" id="calDxCm" value="6.4" step="0.1" class="!w-14 text-xs" title="Удлинение резинки под грузом (см)" /> см
-                  <button onclick="calcKFromCalibration()" class="px-2 py-0.5 rounded bg-[var(--primary)] text-[var(--primary-foreground)] font-bold">Найти k</button>
+              <input type="range" id="rngStiff" min="5" max="150" step="0.1" value="52.3" oninput="syncRubber('stiff', this.value)" class="w-full accent-[var(--primary)]" />
+              <div class="text-[11px] text-[var(--muted-foreground)] mt-1.5 flex flex-wrap items-center justify-between gap-1">
+                <span>3 точки замера k (п. 5.1):</span>
+                <div class="flex flex-wrap items-center gap-1">
+                  <button onclick="syncRubber('stiff', 45.8)" class="px-1.5 py-0.5 rounded bg-[var(--secondary)] hover:opacity-80 font-semibold">k₁=45.8</button>
+                  <button onclick="syncRubber('stiff', 53.0)" class="px-1.5 py-0.5 rounded bg-[var(--secondary)] hover:opacity-80 font-semibold">k₂=53.0</button>
+                  <button onclick="syncRubber('stiff', 58.1)" class="px-1.5 py-0.5 rounded bg-[var(--secondary)] hover:opacity-80 font-semibold">k₃=58.1</button>
+                  <button onclick="syncRubber('stiff', 52.3)" class="px-2 py-0.5 rounded bg-[var(--primary)] text-[var(--primary-foreground)] font-bold">kср=52.3</button>
                 </div>
               </div>
             </div>
@@ -511,7 +512,7 @@
       bandDiaMm: 4.0,
       bandLen0Cm: 4.6,
       stretchCm: 6.9,
-      stiffnessK: 45.8,     // N/m stiffness from physics teacher
+      stiffnessK: 52.3,     // N/m average stiffness of 3 points (45.8, 53.0, 58.1)
 
       showLabels: true,
       showDims: true,
@@ -623,6 +624,9 @@
         state.stiffnessK = num;
         document.getElementById('numStiff').value = num;
         document.getElementById('rngStiff').value = Math.min(150, num);
+        renderTable();
+        updateHUD();
+        return;
       }
       regenerateExperimentData();
     }
