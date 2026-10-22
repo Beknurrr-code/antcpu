@@ -193,10 +193,10 @@
               <span>Угол рычага:</span> <strong id="hudAngle" class="text-[var(--foreground)]">45.0°</strong>
               <span>Высота оси:</span> <strong id="hudAxisH" class="text-[var(--foreground)]">14.2 см</strong>
               <span>Высота старта h:</span> <strong id="hudHeight" class="text-[var(--foreground)]">28.0 см</strong>
-              <span>Энергия жгутов E:</span> <strong id="hudEnergy" class="text-[var(--foreground)]">0.162 Дж</strong>
-              <span>Скорость v:</span> <strong id="hudVel" class="text-[var(--foreground)]">4.02 м/с</strong>
-              <span>Дальность Lтеор:</span> <strong id="hudLTeor" class="text-[var(--foreground)]">189.6 см</strong>
-              <span>Эксперимент:</span> <strong id="hudLastRange" class="text-emerald-400 font-bold">153.2 см</strong>
+              <span>Энергия жгутов E:</span> <strong id="hudEnergy" class="text-[var(--foreground)]">0.109 Дж</strong>
+              <span>Скорость v:</span> <strong id="hudVel" class="text-[var(--foreground)]">3.30 м/с</strong>
+              <span>Дальность Lтеор:</span> <strong id="hudLTeor" class="text-[var(--foreground)]">134.5 см</strong>
+              <span>Эксперимент:</span> <strong id="hudLastRange" class="text-emerald-400 font-bold">163.0 см</strong>
             </div>
           </div>
 
@@ -293,15 +293,15 @@
 
             <div class="p-2 rounded-lg bg-[var(--background)] border border-[var(--border)] sm:col-span-2">
               <div class="flex justify-between items-center mb-1">
-                <span>Общая жёсткость привода <b>k (Н/м)</b>:</span>
-                <input type="number" id="numStiff" min="1" max="1000" step="1" value="68" oninput="syncRubber('stiff', this.value)" />
+                <span>Жёсткость привода <b>k (Н/м)</b>:</span>
+                <input type="number" id="numStiff" min="1" max="1000" step="0.1" value="45.8" oninput="syncRubber('stiff', this.value)" />
               </div>
-              <input type="range" id="rngStiff" min="5" max="150" step="1" value="68" oninput="syncRubber('stiff', this.value)" class="w-full accent-[var(--primary)]" />
+              <input type="range" id="rngStiff" min="5" max="150" step="0.1" value="45.8" oninput="syncRubber('stiff', this.value)" class="w-full accent-[var(--primary)]" />
               <div class="text-[11px] text-[var(--muted-foreground)] mt-1 flex flex-wrap items-center justify-between gap-1">
                 <span>Калибровка k по п. 5.1 (груз m и удлинение Δx):</span>
                 <div class="flex items-center gap-1">
                   <input type="number" id="calMassG" value="300" class="!w-14 text-xs" title="Масса подвешенного груза (г)" /> г /
-                  <input type="number" id="calDxCm" value="4.3" step="0.1" class="!w-14 text-xs" title="Удлинение резинки под грузом (см)" /> см
+                  <input type="number" id="calDxCm" value="6.4" step="0.1" class="!w-14 text-xs" title="Удлинение резинки под грузом (см)" /> см
                   <button onclick="calcKFromCalibration()" class="px-2 py-0.5 rounded bg-[var(--primary)] text-[var(--primary-foreground)] font-bold">Найти k</button>
                 </div>
               </div>
@@ -511,7 +511,7 @@
       bandDiaMm: 4.0,
       bandLen0Cm: 4.6,
       stretchCm: 6.9,
-      stiffnessK: 68.0,     // N/m total effective stiffness
+      stiffnessK: 45.8,     // N/m stiffness from physics teacher
 
       showLabels: true,
       showDims: true,
@@ -527,7 +527,7 @@
       projectile: null,
       trajectories: [],
       results: {
-        sphere: [153.0, 155.0, 151.5, 154.0, 152.5],
+        sphere: [163.0, 158.0, 155.0, 160.0, 157.0],
         cone:   [150.0, 146.5, 152.0, 148.0, 151.0],
         cube:   [148.0, 145.0, 150.5, 146.0, 147.5],
         disk:   [101.0, 97.5, 104.0, 99.0, 102.5]
@@ -958,7 +958,7 @@
         const mean = trials.reduce((a, b) => a + b, 0) / n;
         const variance = trials.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / (n - 1);
         const sigma = Math.sqrt(variance);
-        const deltaPct = ((phys.LTeorCm - mean) / phys.LTeorCm) * 100;
+        const deltaPct = (Math.abs(phys.LTeorCm - mean) / phys.LTeorCm) * 100;
 
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-[var(--secondary)]/40 transition cursor-pointer';
